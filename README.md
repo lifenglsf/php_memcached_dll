@@ -17,9 +17,11 @@
     copy php-memcached.dll to you php extension directory
     
     **notice:Note the version of PHP and thread safety whether or not**
-    ###memcached_support:
+    
+    * memcached_support:
+    
     |name|is_support|
-    |----|----------|
+    ----|----------
     |SASL support|no|
     |Session support|yes|
     |igbinary support|yes|
