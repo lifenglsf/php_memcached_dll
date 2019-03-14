@@ -16,4 +16,4 @@
  
     copy php-memcached.dll to you php extension directory
     
-    notice:<font color="red">Note the version of PHP and thread safety whether or not</font>    
+    **notice:Note the version of PHP and thread safety whether or not**
