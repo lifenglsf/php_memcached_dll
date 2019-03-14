@@ -28,4 +28,6 @@
     |json support|yes|
     |msgpack support|no|
     
+    
+    win7 enterprise build
      
