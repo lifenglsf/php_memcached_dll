@@ -16,7 +16,7 @@
  
     copy php-memcached.dll to you php extension directory
     
-    **notice:Note the version of PHP and thread safety whether or not**
+    **notice:Note the version of PHP and thread safety whether or not,enable igbinary extension**
     
     * memcached_support:
     
@@ -29,5 +29,5 @@
     |msgpack support|no|
     
     
-    win7 enterprise build
+   build platform:win7 enterprise
      
