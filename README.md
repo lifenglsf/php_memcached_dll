@@ -20,6 +20,10 @@
     |igbinary support|no|
     |json support|yes|
     |msgpack support|no|
+	
+	
+Tips:
+ucrtbased.dll missing copy ucrtbased to system32 or SysWOW64
     
     
      
