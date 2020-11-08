@@ -1,7 +1,7 @@
 # php-memcached for windows
  * php-memcached dependency libmemcached
 
-        copy libmemcached.dll to Windows 
+        copy libmemcached.dll to c:\Windows 
         
   
         
