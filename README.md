@@ -33,6 +33,15 @@
     |json support|yes|
     |msgpack support|yes|
 	
+     **pre3.2.0**
+     
+    |name|is_support|
+    ----|----------
+    |SASL support|no|
+    |Session support|yes|
+    |igbinary support|yes|
+    |json support|yes|
+    |msgpack support|yes|	
 
 
 version>=3.15 
