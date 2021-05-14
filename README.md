@@ -62,6 +62,7 @@ version>=3.15
     	
 Tips:
 ucrtbased.dll missing copy ucrtbased to system32 or SysWOW64
+recommend use x64.x86 may be could not worked correctly.
     
 ### Visitors
 
