@@ -15,9 +15,8 @@ on:
 jobs:
   8.0ts:
     name: 8.0ts
-    runs-on: [ windows-latest ]
-      name: 8.0ts
-      steps:
+    runs-on: windows-latest 
+    steps:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
@@ -26,9 +25,8 @@ jobs:
             phpts: ts # specify ts or nts
   8.0nts:
     name: 8.0nts
-    runs-on: [ windows-latest ]
-      name: 8.0nts
-      steps:
+    runs-on: windows-latest
+    steps:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
@@ -36,9 +34,8 @@ jobs:
 
   7.4ts:
     name: 7.4ts
-    runs-on: [ windows-latest ]
-      name: 7.4ts
-      steps:
+    runs-on: windows-latest 
+    steps:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
@@ -47,18 +44,16 @@ jobs:
             phpts: ts # specify ts or nts
   7.4nts:
     name: 7.4nts
-    runs-on: [ windows-latest ]
-      name: 7.4nts
-      steps:
+    runs-on: windows-latest
+    steps:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
             php-version: '7.0'
   7.3ts:
     name: 7.3ts
-    runs-on: [ windows-latest ]
-      name: 7.3ts
-      steps:
+    runs-on: windows-latest
+    steps:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
@@ -67,9 +62,8 @@ jobs:
             phpts: ts # specify ts or nts
   7.3nts:
     name: 7.3nts
-    runs-on: [ windows-latest ]
-      name: 7.3nts
-      steps:
+    runs-on: windows-latest
+    steps:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
