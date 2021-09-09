@@ -13,7 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  8.0ts:
+  80ts:
     name: 8.0ts
     runs-on: windows-latest 
     steps:
@@ -23,7 +23,7 @@ jobs:
             php-version: '8.0'
           env:
             phpts: ts # specify ts or nts
-  8.0nts:
+  80nts:
     name: 8.0nts
     runs-on: windows-latest
     steps:
@@ -32,7 +32,7 @@ jobs:
           with:
             php-version: '8.0'
 
-  7.4ts:
+  74ts:
     name: 7.4ts
     runs-on: windows-latest 
     steps:
@@ -42,7 +42,7 @@ jobs:
             php-version: '7.4'
           env:
             phpts: ts # specify ts or nts
-  7.4nts:
+  74nts:
     name: 7.4nts
     runs-on: windows-latest
     steps:
@@ -50,7 +50,7 @@ jobs:
           uses: shivammathur/setup-php@v2
           with:
             php-version: '7.0'
-  7.3ts:
+  73ts:
     name: 7.3ts
     runs-on: windows-latest
     steps:
@@ -60,7 +60,7 @@ jobs:
             php-version: '7.3'
           env:
             phpts: ts # specify ts or nts
-  7.3nts:
+  73nts:
     name: 7.3nts
     runs-on: windows-latest
     steps:
