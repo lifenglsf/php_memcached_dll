@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the workflow will run
@@ -15,65 +13,64 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
- 8.0ts :
-  name: 8.0ts
-  runs-on:
+  8.0ts:
     name: 8.0ts
-    steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.0'
-      env:
-        phpts: ts # specify ts or nts
- 8.0nts :
-  name: 8.0nts
-  runs-on:
+    runs-on:
+      name: 8.0ts
+      steps:
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '8.0'
+          env:
+            phpts: ts # specify ts or nts
+  8.0nts:
     name: 8.0nts
-    steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.0'
- 
- 7.4ts :
-  name: 7.4ts
-  runs-on:
+    runs-on:
+      name: 8.0nts
+      steps:
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '8.0'
+
+  7.4ts:
     name: 7.4ts
-    steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-      env:
-        phpts: ts # specify ts or nts
- 7.4nts :
-  name: 7.4nts
-  runs-on:
+    runs-on:
+      name: 7.4ts
+      steps:
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '7.4'
+          env:
+            phpts: ts # specify ts or nts
+  7.4nts:
     name: 7.4nts
-    steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.0'
- 7.3ts :
-  name: 7.3ts
-  runs-on:
+    runs-on:
+      name: 7.4nts
+      steps:
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '7.0'
+  7.3ts:
     name: 7.3ts
-    steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.3'
-      env:
-        phpts: ts # specify ts or nts
- 7.3nts :
-  name: 7.3nts
-  runs-on:
+    runs-on:
+      name: 7.3ts
+      steps:
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '7.3'
+          env:
+            phpts: ts # specify ts or nts
+  7.3nts:
     name: 7.3nts
-    steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.3'
-  
+    runs-on:
+      name: 7.3nts
+      steps:
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '7.3'
