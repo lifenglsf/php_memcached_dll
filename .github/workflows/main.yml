@@ -24,6 +24,7 @@ jobs:
             php-version: '8.0'
           env:
             phpts: ts # specify ts or nts
+            
   8.0nts:
     name: 8.0nts
     runs-on:
@@ -33,6 +34,7 @@ jobs:
           uses: shivammathur/setup-php@v2
           with:
             php-version: '8.0'
+          run: echo Hello, world!
 
   7.4ts:
     name: 7.4ts
