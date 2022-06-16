@@ -63,11 +63,12 @@ version>=3.15
 Tips:
 ucrtbased.dll missing copy ucrtbased to system32 or SysWOW64
 ## recommend use x64. x86 may be could not worked correctly before pre-3.2.0.
+## The pre-release is not a stable version, it is automatically compiled based on the latest php-memcached
     
 ### Visitors
 
 ![](http://profile-counter.glitch.me/lifenglsf/count.svg)
-### 🧧 赞助
+
 
     
      
