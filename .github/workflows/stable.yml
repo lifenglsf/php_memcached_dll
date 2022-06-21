@@ -17,7 +17,8 @@ jobs:
       - name: Set the value
         id: set_value
         run: |
-          cat stable_version.txt >> $GITHUB_ENV
+          # cat stable_version.txt >> $GITHUB_ENV
+          echo "ver=3.2.0" >> $GITHUB_ENV
       - name: Use the value
         id: get_value
         run: |
