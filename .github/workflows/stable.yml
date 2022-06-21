@@ -1,0 +1,132 @@
+name: Build and Test on Windows
+on: 
+  push: 
+  schedule:
+    - cron: 0 2 * * *
+jobs:
+  pre:
+    defaults:
+      run:
+        shell: cmd
+    strategy:
+      matrix:
+          arch: [x64]
+    runs-on: windows-2019
+    steps:
+      - name: Checkout memcached
+        uses: actions/checkout@v2
+        with:
+          repository: php-memcached-dev/php-memcached
+      - name: Download memcached.exe
+        run: |
+          curl -L http://static.runoob.com/download/memcached-1.4.5-amd64.zip -o memcached.zip
+          7z x memcached.zip -o.\mem
+          mem\memcached-amd64\memcached.exe -d
+      
+  ts74-x64:
+    needs: [pre]
+    defaults:
+      run:
+        shell: cmd
+    runs-on: windows-2019
+    strategy:
+      matrix:
+          version: ["7.4","8.0","8.1"]
+          arch: [x64,x86]
+          ts: [ts,nts]
+    steps:
+      - name: set version
+        run: |
+          set /P RESP_VERSION=<stable_version.txt
+      - name: Checkout memcached
+        uses: actions/checkout@v2
+        with:
+          repository: php-memcached-dev/php-memcached
+          ref: %RESP_VERSION%
+      - name: Setup PHP
+        id: setup-php
+        uses: cmb69/setup-php-sdk@v0.3
+        with:
+          version: ${{matrix.version}}
+          arch: ${{matrix.arch}}
+          ts: ${{matrix.ts}}
+          deps: zlib
+      - name: Download deps
+        run: |
+          curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
+          7z x ${{matrix.arch}}.zip -o..\deps
+          
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.arch}}
+          toolset: ${{steps.setup-php.outputs.toolset}}
+      - name: phpize
+        run: |
+          phpize
+      - name: configure
+        run: |
+          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
+      - name: make
+        run: nmake
+      - name: make install
+        run: nmake install
+      - name: copy ini
+        run: copy ${{steps.setup-php.outputs.prefix}}\php.ini-development ${{steps.setup-php.outputs.prefix}}\php.ini
+      - name: copy libmemcached 
+        run:  copy ..\deps\bin\libmemcached.dll ${{steps.setup-php.outputs.prefix}}
+      - name: set extension dir
+        run : echo extension_dir="${{steps.setup-php.outputs.prefix}}\ext"; >>${{steps.setup-php.outputs.prefix}}\php.ini
+      - name: show file
+        run: dir ${{steps.setup-php.outputs.prefix}} /N /S
+      - name: extension path
+        run: php -i|grep "extension_dir"
+      - name: add memcached ext
+        run : echo extension=memcached; >>${{steps.setup-php.outputs.prefix}}\php.ini
+      - name: show ini config
+        run: php --ini
+      - name: php module
+        run: php -m
+      - name: copy file
+        run: |
+          mkdir -p ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+          copy ..\deps\bin\libmemcached.dll ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+          copy ${{steps.setup-php.outputs.prefix}}\ext\php_memcached.dll ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+          dir ${{ github.workspace }} /N /S
+          7z a ${{ github.workspace }}\php${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}\*.*
+          
+      #- name: test
+      #  run: nmake test
+      - name: Accidentally upload to the same artifact via multiple jobs
+        uses: actions/upload-artifact@v3
+        with:
+            name: php${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+            path: ${{ github.workspace }}\php${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
+      #- name: create zip
+      #  run: |
+      #    zip -r ${{steps.setup-php.outputs.prefix}}/php-7.4-x64.zip ${{steps.setup-php.outputs.prefix}}/libmemcached.dll ${{steps.setup-php.outputs.prefix}}/ext/php_memcached.dll
+  create_tag:   
+    needs: [ts74-x64]
+    defaults:
+      run:
+        shell: cmd
+    runs-on: windows-2019
+    steps: 
+      - name: set version
+        run: |
+          set /P RESP_VERSION=<stable_version.txt
+      - name : download artifact
+        uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
+        with:
+          names: php7.4-x64-ts php8.0-x64-ts php8.1-x64-ts php7.4-x64-nts php8.0-x64-nts php8.1-x64-nts php7.4-x86-nts php8.0-x86-nts php8.1-x86-nts php7.4-x86-ts php8.0-x86-ts php8.1-x86-ts
+          paths: ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }}
+      - name: show file
+        run: |
+          dir ${{ github.workspace }} /N /S
+     
+      - name: create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "${{github.workspace}}\\php7.4-x64-ts.7z,${{github.workspace}}\\php8.0-x64-ts.7z,${{github.workspace}}\\php8.1-x64-ts.7z,${{github.workspace}}\\php7.4-x64-nts.7z,${{github.workspace}}\\php8.0-x64-nts.7z,${{github.workspace}}\\php8.1-x64-nts.7z,${{github.workspace}}\\php7.4-x86-ts.7z,${{github.workspace}}\\php8.0-x86-ts.7z,${{github.workspace}}\\php8.1-x86-ts.7z,${{github.workspace}}\\php7.4-x86-nts.7z,${{github.workspace}}\\php8.0-x86-nts.7z,${{github.workspace}}\\php8.1-x86-nts.7z"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: php_memcached_dll_%RESP_VERSION%
