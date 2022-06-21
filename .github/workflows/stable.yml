@@ -23,7 +23,7 @@ jobs:
       - name: Use the value
         id: step_two
         run: |
-          echo "$VER" # This will output 'yellow'
+          echo "$Ver" # This will output 'yellow'
       - name: Checkout memcached
         uses: actions/checkout@v2
         with:
