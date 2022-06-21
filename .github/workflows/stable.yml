@@ -16,8 +16,8 @@ jobs:
         uses: actions/checkout@v3
       - name: set version
         run: |
-          echo "ver=3.2.0" >> $GITHUB_ENV
-          echo "aaa ${{ env.ver }} bbb"
+          echo "action_state=yellow" >> $GITHUB_ENV
+          echo "${{ env.action_state }}" 
       - name: Checkout memcached
         uses: actions/checkout@v2
         with:
