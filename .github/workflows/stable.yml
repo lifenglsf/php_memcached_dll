@@ -1,7 +1,8 @@
 name: Build and Test on Windows
 on: 
   push: 
-  
+env: 
+    Ver: 3.2.0
 jobs:
   pre:
     defaults:
@@ -11,19 +12,8 @@ jobs:
       matrix:
           arch: [x64]
     runs-on: windows-2019
-    env: 
-      Ver: cat stable_version.txt
+    
     steps:
-      - name: Checkout 
-        uses: actions/checkout@v3
-      - name: Set the value
-        id: step_one
-        run: |
-          echo "action_state=yellow" >> $GITHUB_ENV
-      - name: Use the value
-        id: step_two
-        run: |
-          echo "${{ env.Ver }}" # This will output 'yellow'
       - name: Checkout memcached
         uses: actions/checkout@v2
         with:
@@ -46,12 +36,6 @@ jobs:
           arch: [x64]
           ts: [ts]
     steps:
-      - name: Checkout 
-        uses: actions/checkout@v3
-      - name: set version
-        run: |
-          cat stable_version.txt >> $GITHUB_ENV
-          ${{ env }}
       - name: Checkout memcached
         uses: actions/checkout@v3
         with:
@@ -139,6 +123,6 @@ jobs:
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{github.workspace}}\\php7.4-x64-ts.7z,${{github.workspace}}\\php8.0-x64-ts.7z,${{github.workspace}}\\php8.1-x64-ts.7z,${{github.workspace}}\\php7.4-x64-nts.7z,${{github.workspace}}\\php8.0-x64-nts.7z,${{github.workspace}}\\php8.1-x64-nts.7z,${{github.workspace}}\\php7.4-x86-ts.7z,${{github.workspace}}\\php8.0-x86-ts.7z,${{github.workspace}}\\php8.1-x86-ts.7z,${{github.workspace}}\\php7.4-x86-nts.7z,${{github.workspace}}\\php8.0-x86-nts.7z,${{github.workspace}}\\php8.1-x86-nts.7z"
+          artifacts: "${{github.workspace}}\\_${{ env.Ver }}\\php7.4-x64-ts.7z,${{github.workspace}}\\php8.0-x64-ts.7z,${{github.workspace}}\\php8.1-x64-ts.7z,${{github.workspace}}\\php7.4-x64-nts.7z,${{github.workspace}}\\php8.0-x64-nts.7z,${{github.workspace}}\\php8.1-x64-nts.7z,${{github.workspace}}\\php7.4-x86-ts.7z,${{github.workspace}}\\php8.0-x86-ts.7z,${{github.workspace}}\\php8.1-x86-ts.7z,${{github.workspace}}\\php7.4-x86-nts.7z,${{github.workspace}}\\php8.0-x86-nts.7z,${{github.workspace}}\\php8.1-x86-nts.7z"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: php_memcached_dll_${{ env.ver }}
+          tag: php_memcached_dll_${{ env.Ver }}
