@@ -39,8 +39,7 @@ jobs:
       - name: set version
         run: |
           cat stable_version.txt >> $GITHUB_ENV
-          echo ${{ env }}
-          exit
+          env
       - name: Checkout memcached
         uses: actions/checkout@v3
         with:
