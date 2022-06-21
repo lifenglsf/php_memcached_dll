@@ -15,11 +15,11 @@ jobs:
       - name: Checkout 
         uses: actions/checkout@v3
       - name: Set the value
-        id: set value
+        id: set_value
         run: |
           cat stable_version.txt >> $GITHUB_ENV
       - name: Use the value
-        id: get value
+        id: get_value
         run: |
           echo "env value ${{ env.ver }}" # This will output 'yellow'
       - name: Checkout memcached
