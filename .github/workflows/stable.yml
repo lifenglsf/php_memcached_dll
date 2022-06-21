@@ -11,6 +11,8 @@ jobs:
       matrix:
           arch: [x64]
     runs-on: windows-2019
+    env: 
+      VER: 3.2.0
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
@@ -21,7 +23,7 @@ jobs:
       - name: Use the value
         id: step_two
         run: |
-          echo "${{ env.action_state }}" # This will output 'yellow'
+          echo "${{ VER }}" # This will output 'yellow'
       - name: Checkout memcached
         uses: actions/checkout@v2
         with:
