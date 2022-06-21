@@ -34,11 +34,13 @@ jobs:
           arch: [x64,x86]
           ts: [ts,nts]
     steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
       - name: set version
         run: |
           cat stable_version.txt >>$GITHUB_ENV
       - name: Checkout memcached
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: php-memcached-dev/php-memcached
           ref: ${{ env.ver }}
