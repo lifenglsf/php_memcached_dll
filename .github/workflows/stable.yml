@@ -14,12 +14,14 @@ jobs:
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
-      - name: set version
+      - name: Set the value
+        id: step_one
         run: |
           echo "action_state=yellow" >> $GITHUB_ENV
-      - name: get version
+      - name: Use the value
+        id: step_two
         run: |
-          echo "${{ env.action_state }}" 
+          echo "env value ${{ env.action_state }}" # This will output 'yellow'
       - name: Checkout memcached
         uses: actions/checkout@v2
         with:
