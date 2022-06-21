@@ -30,9 +30,9 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4","8.0","8.1"]
-          arch: [x64,x86]
-          ts: [ts,nts]
+          version: ["7.4"]
+          arch: [x64]
+          ts: [ts]
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
@@ -56,6 +56,7 @@ jobs:
         run: |
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
+          echo "stable version ${{ env.ver }}"
           
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
@@ -113,9 +114,6 @@ jobs:
         shell: cmd
     runs-on: windows-2019
     steps: 
-      - name: set version
-        run: |
-          set /P RESP_VERSION=<stable_version.txt
       - name : download artifact
         uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
         with:
