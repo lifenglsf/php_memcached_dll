@@ -12,7 +12,7 @@ jobs:
           arch: [x64]
     runs-on: windows-2019
     env: 
-      VER: 3.2.0
+      Ver: 3.2.0
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
