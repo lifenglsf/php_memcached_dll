@@ -93,15 +93,15 @@ jobs:
           copy ..\deps\bin\libmemcached.dll ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
           copy ${{steps.setup-php.outputs.prefix}}\ext\php_memcached.dll ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
           dir ${{ github.workspace }} /N /S
-          7z a ${{ github.workspace }}\php${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}\*.*
+          7z a ${{ github.workspace }}\php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}\*.*
           
       #- name: test
       #  run: nmake test
       - name: Accidentally upload to the same artifact via multiple jobs
         uses: actions/upload-artifact@v3
         with:
-            name: php${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
-            path: ${{ github.workspace }}\php${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
+            name: php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+            path: ${{ github.workspace }}\php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
   create_tag:   
     needs: [ts74-x64]
     defaults:
@@ -112,7 +112,7 @@ jobs:
       - name : download artifact
         uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
         with:
-          names: php7.4-x64-ts php8.0-x64-ts php8.1-x64-ts php7.4-x64-nts php8.0-x64-nts php8.1-x64-nts php7.4-x86-nts php8.0-x86-nts php8.1-x86-nts php7.4-x86-ts php8.0-x86-ts php8.1-x86-ts
+          names: php-${{ env.Ver }}-7.4-x64-ts php-${{ env.Ver }}-8.0-x64-ts php-${{ env.Ver }}-8.1-x64-ts php-${{ env.Ver }}-7.4-x64-nts php-${{ env.Ver }}-8.0-x64-nts php-${{ env.Ver }}-8.1-x64-nts php-${{ env.Ver }}-7.4-x86-nts php-${{ env.Ver }}-8.0-x86-nts php-${{ env.Ver }}-8.1-x86-nts php-${{ env.Ver }}-7.4-x86-ts php-${{ env.Ver }}-8.0-x86-ts php-${{ env.Ver }}-8.1-x86-ts
           paths: ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }}
       - name: delete_tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
@@ -124,6 +124,6 @@ jobs:
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{github.workspace}}\\php7.4-x64-ts.7z,${{github.workspace}}\\php8.0-x64-ts.7z,${{github.workspace}}\\php8.1-x64-ts.7z,${{github.workspace}}\\php7.4-x64-nts.7z,${{github.workspace}}\\php8.0-x64-nts.7z,${{github.workspace}}\\php8.1-x64-nts.7z,${{github.workspace}}\\php7.4-x86-ts.7z,${{github.workspace}}\\php8.0-x86-ts.7z,${{github.workspace}}\\php8.1-x86-ts.7z,${{github.workspace}}\\php7.4-x86-nts.7z,${{github.workspace}}\\php8.0-x86-nts.7z,${{github.workspace}}\\php8.1-x86-nts.7z"
+          artifacts: "${{github.workspace}}\\php-${{ env.Ver }}-7.4-x64-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.0-x64-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x64-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-7.4-x64-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.0-x64-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x64-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-7.4-x86-ts.7z,${{github.workspace}}\\-${{ env.Ver }}-php8.0-x86-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x86-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-7.4-x86-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.0-x86-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x86-nts.7z"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.Ver }}
