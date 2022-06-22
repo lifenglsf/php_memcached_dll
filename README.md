@@ -69,6 +69,11 @@ ucrtbased.dll missing copy ucrtbased to system32 or SysWOW64
 
 ![](http://profile-counter.glitch.me/lifenglsf/count.svg)
 
+TodList
+- [x] Automatically compile the base version
+- [ ] Automatically compile msgpack based versions
+- [ ] Automatically compile igbinary based versions
+
 
     
      
