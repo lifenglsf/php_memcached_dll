@@ -2,7 +2,7 @@ name: Build and Test on Windows
 on: 
   push: 
 env: 
-    Ver: 3.2.0
+    Ver: v3.2.0
 jobs:
   pre:
     defaults:
