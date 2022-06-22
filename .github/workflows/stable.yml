@@ -101,7 +101,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: php-${{env.ver}}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
-            path: ${{ github.workspace }}\php${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
+            path: ${{ github.workspace }}\php-${{env.ver}}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
   create_tag:   
     needs: [ts74-x64]
     defaults:
