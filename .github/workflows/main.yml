@@ -1,8 +1,7 @@
 name: Build and Test on Windows
 on: 
-  push: 
   schedule:
-    - cron: 0 2 * * *
+    - cron: '0 2 * * *'
 jobs:
   pre:
     defaults:
