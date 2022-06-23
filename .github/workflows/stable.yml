@@ -4,7 +4,7 @@ on:
     paths: 
       - .github/workflows/stable.yml
 env: 
-    Ver: v3.2.0
+    Ver: windows_msgpack_support 
 jobs:
   pre:
     defaults:
@@ -19,7 +19,7 @@ jobs:
       - name: Checkout memcached
         uses: actions/checkout@v2
         with:
-          repository: php-memcached-dev/php-memcached
+          repository: lifenglsf/php-memcached
           ref: ${{ env.ver }}
       - name: Download memcached.exe
         run: |
