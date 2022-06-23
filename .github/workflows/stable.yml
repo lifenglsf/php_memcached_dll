@@ -34,9 +34,9 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4","8.0","8.1"]
-          arch: [x64,x86]
-          ts: [ts,nts]
+          version: ["7.4"]
+          arch: [x64]
+          ts: [ts]
     steps:
       - name: Checkout memcached
         uses: actions/checkout@v3
@@ -56,9 +56,9 @@ jobs:
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
-          curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip msgpack.zip
+          curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
           7z x msgpack.zip -o..\deps
-          7z x msgpack.zip -o.\
+          7z x msgpack.zip
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
