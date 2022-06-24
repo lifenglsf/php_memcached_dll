@@ -35,7 +35,7 @@ jobs:
     strategy:
       matrix:
           version: ["7.4"]
-          arch: [x64]
+          arch: [amd64]
           ts: [ts]
     steps:
       - name: Checkout memcached
@@ -45,21 +45,22 @@ jobs:
           ref: ${{ env.ver }}
       - name: Setup PHP
         id: setup-php
-        uses: cmb69/setup-php-sdk@v0.3
+        uses: shivammathur/setup-php@v2
         with:
-          version: ${{matrix.version}}
+          php-version: ${{matrix.version}}
+          extension: msgpack
           arch: ${{matrix.arch}}
-          ts: ${{matrix.ts}}
+          php-ts: ${{matrix.ts}}
           deps: zlib
       - name: Download deps
         run: |
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
-          curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
-          7z x msgpack.zip
+          #curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+          #7z x msgpack.zip
           # dir /N /P
-          xcopy /S /E msgpack-php-master ..\deps\include
+          #xcopy /S /E msgpack-php-master ..\deps\include
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -70,7 +71,7 @@ jobs:
           phpize
       - name: configure
         run: |
-          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json  --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} 
+          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json  --enable-memcached-msgpack --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} 
       - name: make
         run: nmake
       - name: make install
