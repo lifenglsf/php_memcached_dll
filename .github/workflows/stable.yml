@@ -49,7 +49,7 @@ jobs:
         with:
           php-version: ${{matrix.version}}
           extensions: msgpack
-          php-ts: ${{matrix.ts}}
+          phpts: ${{matrix.ts}}
       - name: Download deps
         run: |
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
