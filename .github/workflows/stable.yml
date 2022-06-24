@@ -32,7 +32,6 @@ jobs:
       run:
         shell: cmd
     runs-on: windows-2019
-    container: shivammathur/node:latest-${{ matrix.arch }}
     strategy:
       matrix:
           version: ["7.4"]
