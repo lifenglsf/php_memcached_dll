@@ -4,7 +4,7 @@ on:
     paths: 
       - .github/workflows/stable.yml
 env: 
-    Ver: windows_msgpack_support 
+    Ver: windows_msgpack_support
 jobs:
   pre:
     defaults:
@@ -19,13 +19,13 @@ jobs:
       - name: Checkout memcached
         uses: actions/checkout@v2
         with:
-          repository: lifenglsf/php-memcached
+          repository: php-memcached-dev/php-memcached
           ref: ${{ env.ver }}
-      - name: Download memcached.exe
-        run: |
-          curl -L http://static.runoob.com/download/memcached-1.4.5-amd64.zip -o memcached.zip
-          7z x memcached.zip -o.\mem
-          mem\memcached-amd64\memcached.exe -d
+      # - name: Download memcached.exe
+      #  run: |
+      #    curl -L http://static.runoob.com/download/memcached-1.4.5-amd64.zip -o memcached.zip
+      #    7z x memcached.zip -o.\mem
+      #    mem\memcached-amd64\memcached.exe -d
   ts74-x64-msgpack:
     needs: [pre]
     defaults:
@@ -34,9 +34,9 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4"]
-          arch: [x64]
-          ts: [ts]
+          version: ["7.4","8.0","8.1"]
+          arch: [x64,x86]
+          ts: [ts,nts]
     steps:
       - name: Checkout memcached
         uses: actions/checkout@v3
@@ -45,24 +45,31 @@ jobs:
           ref: ${{ env.ver }}
       - name: Setup PHP
         id: setup-php
-        uses: shivammathur/setup-php@v2
+        uses: cmb69/setup-php-sdk@v0.3
         with:
-          php-version: ${{matrix.version}}
-          extensions: msgpack
-          tools: phpize
-        env: 
-          phpts: ${{matrix.ts}}
+          version: ${{matrix.version}}
+          arch: ${{matrix.arch}}
+          ts: ${{matrix.ts}}
+          deps: zlib
       - name: Download deps
         run: |
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
+          curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip msgpack.zip
+          7z x msgpack.zip -o.\
+          xcopy /S /E msgpack-php-master ..\deps\include
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.arch}}
+          toolset: ${{steps.setup-php.outputs.toolset}}
       - name: phpize
         run: |
           phpize
       - name: configure
         run: |
-          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json  --enable-memcached-msgpack --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} 
+          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
       - name: make
         run: nmake
       - name: make install
@@ -93,11 +100,11 @@ jobs:
           
       #- name: test
       #  run: nmake test
-      - name: Accidentally upload to the same artifact via multiple jobs
-        uses: actions/upload-artifact@v3
-        with:
-            name: php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
-            path: ${{ github.workspace }}\php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
+      # - name: Accidentally upload to the same artifact via multiple jobs
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #      name: php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+      #      path: ${{ github.workspace }}\php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
   create_tag:   
     needs: [ts74-x64-msgpack]
     defaults:
