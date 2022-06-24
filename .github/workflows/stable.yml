@@ -35,7 +35,7 @@ jobs:
     strategy:
       matrix:
           version: ["7.4"]
-          arch: [amd64]
+          arch: [x64]
           ts: [ts]
     steps:
       - name: Checkout memcached
