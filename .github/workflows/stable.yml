@@ -32,6 +32,7 @@ jobs:
       run:
         shell: cmd
     runs-on: windows-2019
+    container: shivammathur/node:latest-${{ matrix.arch }}
     strategy:
       matrix:
           version: ["7.4"]
@@ -48,10 +49,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{matrix.version}}
-          extension: msgpack
-          arch: ${{matrix.arch}}
+          extensions: msgpack
           php-ts: ${{matrix.ts}}
-          deps: zlib
       - name: Download deps
         run: |
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
