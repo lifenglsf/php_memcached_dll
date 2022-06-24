@@ -57,8 +57,8 @@ jobs:
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
-          7z x msgpack.zip -o..\deps
           7z x msgpack.zip
+          xcopy /S /E msgpack-php-master/ ..\deps\include
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
