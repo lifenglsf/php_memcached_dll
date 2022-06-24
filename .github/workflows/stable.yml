@@ -49,6 +49,7 @@ jobs:
         with:
           php-version: ${{matrix.version}}
           extensions: msgpack
+          tools: phpize
         env: 
           phpts: ${{matrix.ts}}
       - name: Download deps
