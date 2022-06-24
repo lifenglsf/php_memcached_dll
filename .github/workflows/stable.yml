@@ -43,6 +43,7 @@ jobs:
         with:
           repository: lifenglsf/php-memcached
           ref: ${{ env.ver }}
+          path: php-memcached
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.3
@@ -56,7 +57,7 @@ jobs:
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
-          curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip msgpack.zip
+          curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
       - name: Enable Developer Command Prompt
