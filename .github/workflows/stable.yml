@@ -56,11 +56,6 @@ jobs:
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
-      - name: Enable Developer Command Prompt
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: ${{matrix.arch}}
-          toolset: ${{steps.setup-php.outputs.toolset}}
       - name: phpize
         run: |
           phpize
