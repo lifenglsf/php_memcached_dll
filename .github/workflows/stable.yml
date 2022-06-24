@@ -57,10 +57,10 @@ jobs:
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
-          #curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
-          #7z x msgpack.zip
+          # curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+          # 7z x msgpack.zip
           # dir /N /P
-          #xcopy /S /E msgpack-php-master ..\deps\include
+          # xcopy /S /E msgpack-php-master ..\deps\include
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
