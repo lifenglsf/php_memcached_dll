@@ -60,8 +60,8 @@ jobs:
           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
-          LATEST_RELEASE=$(curl -L -s -H 'Accept: application/json' https://github.com/msgpack/msgpack-php/releases/latest)
-          echo "latest version ${{LATEST_RELEASE}}"
+          version=$(curl -L -s -H 'Accept: application/json' https://github.com/msgpack/msgpack-php/releases/latest)
+          echo "latest version ${{version}}"
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
