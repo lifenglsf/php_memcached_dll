@@ -5,8 +5,8 @@ on:
       - .github/workflows/stable.yml
 env: 
     Ver: windows_msgpack_support
-    Mg: 2.2.0RC1
-    Ig: 3.2.7
+    MgVer: 2.2.0RC1
+    IgVer: 3.2.7
 jobs:
   pre:
     defaults:
