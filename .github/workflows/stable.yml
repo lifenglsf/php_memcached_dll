@@ -40,6 +40,14 @@ jobs:
           arch: [x64,x86]
           ts: [ts,nts]
     steps:
+      - name: vs16
+        if: ${{matrix.version}}<'8.0'
+        run: 
+          echo "ENV=vs16" >> $GITHUB_ENV
+      - name: vc15
+        if: ${{matrix.version}}>='8.0'
+        run: 
+          echo "ENV=vc15" >> $GITHUB_ENV
       - name: Checkout memcached
         uses: actions/checkout@v3
         with:
@@ -62,12 +70,7 @@ jobs:
           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
-          if: ${{matrix.version}}<'8.0'
-          run: 
-            echo "ENV=vs16" >> $GITHUB_ENV
-          if: ${{matrix.version}}>='8.0'
-          run: 
-            echo "ENV=vc15" >> $GITHUB_ENV
+         
           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.ENV}}-${{matrix.arch}}.zip
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
