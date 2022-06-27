@@ -5,6 +5,8 @@ on:
       - .github/workflows/stable.yml
 env: 
     Ver: windows_msgpack_support
+    Mg: 2.2.0RC1
+    Ig: 3.2.7
 jobs:
   pre:
     defaults:
@@ -34,7 +36,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4","8.0","8.1"]
+          version: ["7.4"]
           arch: [x64,x86]
           ts: [ts,nts]
     steps:
@@ -60,8 +62,13 @@ jobs:
           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
-          version=$(curl -L -s -H 'Accept: application/json' https://github.com/msgpack/msgpack-php/releases/latest)
-          echo "latest version ${{version}}"
+          if: ${{matrix.version}}<'8.0'
+          run: 
+            echo "ENV=vs16" >> $GITHUB_ENV
+          if: ${{matrix.version}}>='8.0'
+          run: 
+            echo "ENV=vc15" >> $GITHUB_ENV
+          curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{Mg}}/php_msgpack-${{mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.ENV}}-${{matrix.arch}}.zip
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
