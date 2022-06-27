@@ -60,6 +60,8 @@ jobs:
           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
+          LATEST_RELEASE=$(curl -L -s -H 'Accept: application/json' https://github.com/msgpack/msgpack-php/releases/latest)
+          echo "latest version ${{LATEST_RELEASE}}"
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -70,7 +72,7 @@ jobs:
           phpize
       - name: configure
         run: |
-          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
+          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
       - name: make
         run: nmake
       - name: make install
