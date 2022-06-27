@@ -5,8 +5,8 @@ on:
       - .github/workflows/stable.yml
 env: 
     Ver: windows_msgpack_support
-    MgVer: 2.2.0RC1
-    IgVer: 3.2.7
+    Mg: 2.2.0RC1
+    Ig: 3.2.7
 jobs:
   pre:
     defaults:
@@ -68,7 +68,7 @@ jobs:
           if: ${{matrix.version}}>='8.0'
           run: 
             echo "ENV=vc15" >> $GITHUB_ENV
-          curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{Mg}}/php_msgpack-${{mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.ENV}}-${{matrix.arch}}.zip
+          curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.ENV}}-${{matrix.arch}}.zip
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
