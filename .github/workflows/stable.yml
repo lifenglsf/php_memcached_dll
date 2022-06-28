@@ -40,12 +40,16 @@ jobs:
           ts: [ts,nts]
 
     steps:
-      - name: env
-        id: vs-value
+      - name: vc15
+        if: matrix.version=='7.4'
         run: |
-          if ${{matrix.version}}=='7.4'
-            echo "Vs=vc15" >> $GITHUB_ENV
-            echo "::set-output name=Vs::vc15"
+          echo "ENV=vc15" >> $GITHUB_ENV
+          echo "::set-output name=Vs::vc15"
+      - name: vs16
+        if: matrix.version!='7.4'
+        run: |
+         echo "ENV=vs16" >> $GITHUB_ENV
+         echo "::set-output name=Vs::vs16"
       - name: set env
         run: |
           echo "vs env value is : ${{ env.Vs }}"
