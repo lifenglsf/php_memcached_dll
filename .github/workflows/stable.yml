@@ -50,7 +50,7 @@ jobs:
          echo "Vs=vs16" >> $env:GITHUB_ENV
       - name: set env
         run: |
-          echo "vs env value is : ${{ env:Vs }}"
+          echo "vs env value is : ${env:Vs} "
       - name: Checkout memcached
         uses: actions/checkout@v3
         with:
@@ -74,7 +74,7 @@ jobs:
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
          
-          curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env:Vs}}-${{matrix.arch}}.zip
+          curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${env:Vs}-${{matrix.arch}}.zip
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
