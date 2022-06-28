@@ -7,6 +7,7 @@ env:
     Ver: windows_msgpack_support
     Mg: 2.2.0RC1
     Ig: 3.2.7
+    Vs: ${{ steps.set-val.outputs.vs }}
 jobs:
   pre:
     defaults:
@@ -41,15 +42,14 @@ jobs:
 
     steps:
       - name: vc15
-        if: matrix.version=='7.4'
+        id: set-vs
         run: |
-          echo "ENV=vc15" >> $GITHUB_ENV
-          echo "::set-output name=Vs::vc15"
-      - name: vs16
-        if: matrix.version!='7.4'
-        run: |
-         echo "ENV=vs16" >> $GITHUB_ENV
-         echo "::set-output name=Vs::vs16"
+          if '${{matrix.version}}'=='7.4'
+            echo "vs=vc15" >> $GITHUB_ENV
+            echo "::set-output name=Vs::vc15"
+          if '${{matrix.version}}'!='7.4'
+            echo "vs=vc15" >> $GITHUB_ENV
+            echo "::set-output name=Vs::vs16"
       - name: set env
         run: |
           echo "vs env value is : ${{ env.Vs }}"
