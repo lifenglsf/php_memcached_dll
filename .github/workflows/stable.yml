@@ -39,10 +39,12 @@ jobs:
           version: ["7.4"]
           arch: [x64,x86]
           ts: [ts,nts]
-    if: ${{matrix.version}}=='7.4'
-      env： 
-        Vs:vc15
+
     steps:
+      - name: env
+        if: ${{matrix.version}}=='7.4'
+          env： 
+            Vs:vc15
       - name: set env
         run: |
           echo "vs env value is : ${{ env.Vs }}"
