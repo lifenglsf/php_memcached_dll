@@ -43,11 +43,11 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
-          echo "Vs=vc15" >> $$env:GITHUB_ENV
+          echo "Vs=vc15" >> $env:GITHUB_ENV
       - name: vs16
         if: matrix.version!='7.4'
         run: |
-         echo "Vs=vs16" >> $$env:GITHUB_ENV
+         echo "Vs=vs16" >> $env:GITHUB_ENV
       - name: set env
         run: |
           echo "vs env value is : ${{ env.Vs }}"
