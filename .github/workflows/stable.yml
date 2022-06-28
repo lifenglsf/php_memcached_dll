@@ -17,9 +17,6 @@ jobs:
       matrix:
           arch: [x64]
     runs-on: windows-2019
-    if: ${{matrix.version}}=='7.4'
-      env： 
-        Vs:vc15
     steps:
       - name: Checkout memcached
         uses: actions/checkout@v2
@@ -42,6 +39,9 @@ jobs:
           version: ["7.4"]
           arch: [x64,x86]
           ts: [ts,nts]
+    if: ${{matrix.version}}=='7.4'
+      env： 
+        Vs:vc15
     steps:
       - name: set env
         run: |
