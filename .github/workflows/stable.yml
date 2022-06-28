@@ -68,7 +68,7 @@ jobs:
           deps: zlib
       - name: Download deps
         run: |
-          vs='vs16'
+          $vs='vs16'
           if '${{matrix.version}}' =='7.4'
             set vs='vs15'
           echo "vs value $vs-${{vs}}"
