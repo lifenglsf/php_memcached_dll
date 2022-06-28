@@ -40,15 +40,12 @@ jobs:
           ts: [ts,nts]
 
     steps:
-      # - name: vc15
-      #  id: set-vs
-      #  run: |
-      #    if '${{matrix.version}}'=='7.4'
-      #      echo "vs=vc15" >> $GITHUB_ENV
-      #      echo "::set-output name=Vs::vc15"
-      #    if '${{matrix.version}}'!='7.4'
-      #      echo "vs=vc15" >> $GITHUB_ENV
-       #     echo "::set-output name=Vs::vs16"
+      - name: vc15
+        run: |
+          if '${{matrix.version}}'=='7.4'
+            echo "Vs=vc15" >> $env:GITHUB_ENV
+          if '${{matrix.version}}'!='7.4'
+            echo "Vs=vs16" >> $$env:GITHUB_ENV
       - name: set env
         run: |
           echo "vs env value is : ${{ env.Vs }}"
@@ -68,9 +65,6 @@ jobs:
           deps: zlib
       - name: Download deps
         run: |
-          set bs="ds16"
-          if '${{matrix.version}}' =='7.4'
-            set as="cs15"
           echo "vs value $bs"
           echo "env aa value is ${{ env.aa }}"
           echo "env env value is ${{ env.ENV }}"
