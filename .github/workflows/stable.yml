@@ -62,6 +62,7 @@ jobs:
           deps: zlib
       - name: Download deps
         run: |
+          echo "env aa value is ${{ env.aaa }}"
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
