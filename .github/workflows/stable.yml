@@ -43,7 +43,7 @@ jobs:
       - name: env
         id: vs-value
         run: |
-          if: ${{matrix.version}}=='7.4'
+          if ${{matrix.version}}=='7.4'
             echo "Vs=vc15" >> $GITHUB_ENV
             echo "::set-output name=Vs::vc15"
       - name: set env
