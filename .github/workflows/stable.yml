@@ -41,11 +41,11 @@ jobs:
           ts: [ts,nts]
     steps:
       - name: vs16
-        if: ${{matrix.version}}<'8.0'
+        if: ${{matrix.version}}=='7.4'
         run: 
           echo "ENV=vs16" >> $GITHUB_ENV
       - name: vc15
-        if: ${{matrix.version}}>='8.0'
+        if: ${{matrix.version}}!='7.4'
         run: 
           echo "ENV=vc15" >> $GITHUB_ENV
       - name: Checkout memcached
