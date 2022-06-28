@@ -42,10 +42,7 @@ jobs:
     steps:
       - name: vs16-vc15
         run: |
-          if ${{matrix.version}}=='7.4'
-            echo "ENV=vc15" >> $GITHUB_ENV
-          else
-            echo "ENV=vs16" >> $GITHUB_ENV
+          if '${{matrix.version}}'=='7.4' (echo "ENV=vc15" >> $GITHUB_ENV) else (echo "ENV=vs16" >> $GITHUB_ENV)
           echo "env value is : ${{ env.ENV }}"
       - name: Checkout memcached
         uses: actions/checkout@v3
