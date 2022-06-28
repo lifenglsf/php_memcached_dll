@@ -7,7 +7,6 @@ env:
     Ver: windows_msgpack_support
     Mg: 2.2.0RC1
     Ig: 3.2.7
-    Vs: vs16
 jobs:
   pre:
     defaults:
