@@ -68,10 +68,10 @@ jobs:
           deps: zlib
       - name: Download deps
         run: |
-          as="cs16"
+          bs="ds16"
           if '${{matrix.version}}' =='7.4'
-            set as="cs15"
-          echo "vs value ${{as}}"
+            as="cs15"
+          echo "vs value "
           echo "env aa value is ${{ env.aa }}"
           echo "env env value is ${{ env.ENV }}"
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
