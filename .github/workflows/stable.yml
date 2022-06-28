@@ -53,6 +53,7 @@ jobs:
       - name: set env
         run: |
           echo "vs env value is : $env:Vs "
+        shell: powershell
       - name: Checkout memcached
         uses: actions/checkout@v3
         with:
