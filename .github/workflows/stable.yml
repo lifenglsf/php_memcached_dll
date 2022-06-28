@@ -40,9 +40,16 @@ jobs:
           arch: [x64,x86]
           ts: [ts,nts]
     steps:
-      - name: vs16-vc15
+      - name: vc15
+        if: matrix.version=='7.4'
         run: |
-          if '${{matrix.version}}'=='7.4' (echo "ENV=vc15" >> $GITHUB_ENV) else (echo "ENV=vs16" >> $GITHUB_ENV)
+          echo "ENV=vc15" >> $GITHUB_ENV
+      - name: vs16
+        if: matrix.version!='7.4'
+        run: |
+         echo "ENV=vs16" >> $GITHUB_ENV
+      - name: set env
+        run: |
           echo "aa=bbb" >> $GITHUB_ENV
           echo "env value is : ${{ env.ENV }}"
           echo "aaa env value is : $aaa"
@@ -62,7 +69,8 @@ jobs:
           deps: zlib
       - name: Download deps
         run: |
-          echo "env aa value is ${{ env.aaa }}"
+          echo "env aa value is ${{ env.aa }}"
+          echo "env env value is ${{ env.ENV }}"
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "stable version ${{ env.ver }}"
