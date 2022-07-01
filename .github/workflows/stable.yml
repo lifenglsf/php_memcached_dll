@@ -82,6 +82,7 @@ jobs:
          
           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.Vs}}-${{matrix.arch}}.zip -o msgpack-php.zip
           7z x msgpack-php.zip -o.\
+          dir /N /P
           copy php-msgpack.dll ${{steps.setup-php.outputs.prefix}}\ext
           
       - name: Enable Developer Command Prompt
