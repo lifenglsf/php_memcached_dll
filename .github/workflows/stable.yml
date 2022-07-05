@@ -62,7 +62,6 @@ jobs:
         with:
           repository: lifenglsf/php-memcached
           ref: ${{ env.ver }}
-          path: php-memcached
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.3
@@ -83,7 +82,7 @@ jobs:
           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.Vs}}-${{matrix.arch}}.zip -o msgpack-php.zip
           7z x msgpack-php.zip -o.\
           dir /N /S
-          copy php-msgpack.dll ${{steps.setup-php.outputs.prefix}}\php-bin\ext
+          copy php_msgpack.dll ${{steps.setup-php.outputs.prefix}}\ext
           
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
