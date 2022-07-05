@@ -78,10 +78,11 @@ jobs:
           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
-         
+          mkdir .\ext
+          xcopy /S /E msgpack-php-master ..\ext
+          dir ext /N /S
           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.Vs}}-${{matrix.arch}}.zip -o msgpack-php.zip
           7z x msgpack-php.zip -o.\msgpack_dll
-          dir ext /N /S
           copy msgpack_dll\php_msgpack.dll ${{steps.setup-php.outputs.prefix}}\ext
           
       - name: Enable Developer Command Prompt
@@ -94,7 +95,7 @@ jobs:
           phpize
       - name: configure
         run: |
-          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
+          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack  --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
       - name: make
         run: nmake
       - name: make install
