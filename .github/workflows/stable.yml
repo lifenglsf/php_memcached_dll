@@ -79,11 +79,11 @@ jobs:
           7z x msgpack.zip -o.\
           xcopy /S /E msgpack-php-master ..\deps\include
           mkdir ext
-          xcopy /S/ /E msgpack-php-master ext
+          xcopy /S/ /E msgpack-php-master .\ext
           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.Vs}}-${{matrix.arch}}.zip -o msgpack-php.zip
-          7z x msgpack-php.zip -o.\
+          7z x msgpack-php.zip -o.\msgpack_dll
           dir ext /N /S
-          copy php_msgpack.dll ${{steps.setup-php.outputs.prefix}}\ext
+          copy msgpack_dll\php_msgpack.dll ${{steps.setup-php.outputs.prefix}}\ext
           
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
