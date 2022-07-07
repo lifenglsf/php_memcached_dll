@@ -80,7 +80,6 @@ jobs:
           xcopy /S /E msgpack-php-master ..\deps\include
           md.\ext\msgpack
           xcopy /S /E msgpack-php-master .\ext\msgpack
-          rmdir /S /Q msgpack-php-master
           dir ext /N /S
           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.Vs}}-${{matrix.arch}}.zip -o msgpack-php.zip
           7z x msgpack-php.zip -o.\msgpack_dll
