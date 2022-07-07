@@ -80,6 +80,7 @@ jobs:
           xcopy /S /E msgpack-php-master ..\deps\include
           md.\ext\msgpack
           xcopy /S /E msgpack-php-master .\ext\msgpack
+          rmdir /S /Q msgpack-php-master
           dir ext /N /S
           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.Vs}}-${{matrix.arch}}.zip -o msgpack-php.zip
           7z x msgpack-php.zip -o.\msgpack_dll
@@ -95,7 +96,7 @@ jobs:
           phpize
       - name: configure
         run: |
-          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack  --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
+          configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
       - name: make
         run: nmake
       - name: make install
