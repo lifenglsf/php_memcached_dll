@@ -61,7 +61,10 @@ jobs:
           git clone https://github.com/microsoft/php-sdk-binary-tools.git
           cd php-sdk-binary-tools
           git checkout php-sdk-2.2.0
-          phpsdk_${{env.Vs}}-${{matrix.arch}}
+          phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
+          cd bin
+          phpsdk_buildtree.bat php-${{matrix.version}}
+          pwd
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
 #         with:
