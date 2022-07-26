@@ -1,0 +1,166 @@
+name: Build and Test on Windows
+on: 
+  push: 
+    paths: 
+      - .github/workflows/stable.yml
+env: 
+    Ver: windows_msgpack_support
+    Mg: 2.2.0RC1
+    Ig: 3.2.7
+jobs:
+  pre:
+    defaults:
+      run:
+        shell: cmd
+    strategy:
+      matrix:
+          arch: [x64]
+    runs-on: windows-2019
+    steps:
+      - name: Checkout memcached
+        uses: actions/checkout@v2
+        with:
+          repository: lifenglsf/php-memcached
+          ref: ${{ env.ver }}
+      # - name: Download memcached.exe
+      #  run: |
+      #    curl -L http://static.runoob.com/download/memcached-1.4.5-amd64.zip -o memcached.zip
+      #    7z x memcached.zip -o.\mem
+      #    mem\memcached-amd64\memcached.exe -d
+  ts74-x64-msgpack:
+    needs: [pre]
+    defaults:
+      run:
+        shell: cmd
+    runs-on: windows-2019
+    strategy:
+      matrix:
+          version: ["7.4"]
+          arch: [x64,x86]
+          ts: [ts,nts]
+
+    steps:
+      - name: vc15
+        if: matrix.version=='7.4'
+        run: |
+          echo "Vs=vc15" >> $env:GITHUB_ENV
+        shell: powershell
+      - name: vs16
+        if: matrix.version!='7.4'
+        run: |
+         echo "Vs=vs16" >> $env:GITHUB_ENV
+        shell: powershell
+      - name: set env
+        run: |
+          echo "vs env value is : $env:Vs "
+        shell: powershell
+      - name: set envs
+        run: |
+          echo "vs env value is : ${{env.Vs}} "
+      - name: get phpsdktools
+        run:|
+          git clone https://github.com/microsoft/php-sdk-binary-tools.git
+          cd php-sdk-binary-tools
+          git checkout php-sdk-2.2.0
+          phpsdk_${{env.Vs}}-${{matrix.arch}}
+#       - name: Checkout memcached
+#         uses: actions/checkout@v3
+#         with:
+#           repository: lifenglsf/php-memcached
+#           ref: ${{ env.ver }}
+#       - name: Setup PHP
+#         id: setup-php
+#         uses: cmb69/setup-php-sdk@v0.3
+#         with:
+#           version: ${{matrix.version}}
+#           arch: ${{matrix.arch}}
+#           ts: ${{matrix.ts}}
+#           deps: zlib
+#       - name: Download deps
+#         run: |
+#           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
+#           7z x ${{matrix.arch}}.zip -o..\deps
+#           echo "stable version ${{ env.ver }}"
+#           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+#           7z x msgpack.zip -o.\
+#           xcopy /S /E msgpack-php-master ..\deps\include
+#           md.\ext\msgpack
+#           xcopy /S /E msgpack-php-master .\ext\msgpack
+#           dir ext /N /S
+#           curl -L https://windows.php.net/downloads/pecl/releases/msgpack/${{env.Mg}}/php_msgpack-${{env.Mg}}-${{matrix.version}}-${{matrix.ts}}-${{env.Vs}}-${{matrix.arch}}.zip -o msgpack-php.zip
+#           7z x msgpack-php.zip -o.\msgpack_dll
+#           copy msgpack_dll\php_msgpack.dll ${{steps.setup-php.outputs.prefix}}\ext
+          
+#       - name: Enable Developer Command Prompt
+#         uses: ilammy/msvc-dev-cmd@v1
+#         with:
+#           arch: ${{matrix.arch}}
+#           toolset: ${{steps.setup-php.outputs.toolset}}
+#       - name: phpize
+#         run: |
+#           phpize
+#       - name: configure
+#         run: |
+#           configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}} --with-config-file-path=${{steps.setup-php.outputs.prefix}}
+#       - name: make
+#         run: nmake
+#       - name: make install
+#         run: nmake install
+#       - name: copy ini
+#         run: copy ${{steps.setup-php.outputs.prefix}}\php.ini-development ${{steps.setup-php.outputs.prefix}}\php.ini
+#       - name: copy libmemcached 
+#         run:  copy ..\deps\bin\libmemcached.dll ${{steps.setup-php.outputs.prefix}}
+#       - name: set extension dir
+#         run : echo extension_dir="${{steps.setup-php.outputs.prefix}}\ext"; >>${{steps.setup-php.outputs.prefix}}\php.ini
+#       - name: show file
+#         run: dir ${{steps.setup-php.outputs.prefix}} /N /S
+#       - name: extension path
+#         run: php -i|grep "extension_dir"
+#       - name: add memcached msgpack ext
+#         run : |
+#           echo extension=msgpack; >>${{steps.setup-php.outputs.prefix}}\php.ini
+#           echo extension=memcached; >>${{steps.setup-php.outputs.prefix}}\php.ini
+#       - name: show ini config
+#         run: php --ini
+#       - name: php module
+#         run: php -m
+#       - name: copy file
+#         run: |
+#           mkdir -p ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+#           copy ..\deps\bin\libmemcached.dll ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+#           copy ${{steps.setup-php.outputs.prefix}}\ext\php_memcached.dll ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+#           dir ${{ github.workspace }} /N /S
+#           7z a ${{ github.workspace }}\php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}\*.*
+          
+#       #- name: test
+#       #  run: nmake test
+#       # - name: Accidentally upload to the same artifact via multiple jobs
+#       #  uses: actions/upload-artifact@v3
+#       #  with:
+#       #      name: php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}
+#       #      path: ${{ github.workspace }}\php-${{ env.Ver }}-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}.7z
+#   create_tag:   
+#     needs: [ts74-x64-msgpack]
+#     defaults:
+#       run:
+#         shell: cmd
+#     runs-on: windows-2019
+#     steps: 
+#       - name : download artifact
+#         uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
+#         with:
+#           names: php-${{ env.Ver }}-7.4-x64-ts php-${{ env.Ver }}-8.0-x64-ts php-${{ env.Ver }}-8.1-x64-ts php-${{ env.Ver }}-7.4-x64-nts php-${{ env.Ver }}-8.0-x64-nts php-${{ env.Ver }}-8.1-x64-nts php-${{ env.Ver }}-7.4-x86-nts php-${{ env.Ver }}-8.0-x86-nts php-${{ env.Ver }}-8.1-x86-nts php-${{ env.Ver }}-7.4-x86-ts php-${{ env.Ver }}-8.0-x86-ts php-${{ env.Ver }}-8.1-x86-ts
+#           paths: ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }} ${{ github.workspace }}
+#       #- name: delete_tag
+#       #  uses: dev-drprasad/delete-tag-and-release@v0.2.0
+#       #  with:
+#       #    delete_release: true # default: false
+#       #    tag_name: ${{ env.Ver }} # tag name to delete
+#       #  env:
+#       #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       #- name: create release
+#       #  uses: ncipollo/release-action@v1
+#       #  with:
+#       #    artifacts: "${{github.workspace}}\\php-${{ env.Ver }}-7.4-x64-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.0-x64-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x64-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-7.4-x64-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.0-x64-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x64-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-7.4-x86-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.0-x86-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x86-ts.7z,${{github.workspace}}\\php-${{ env.Ver }}-7.4-x86-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.0-x86-nts.7z,${{github.workspace}}\\php-${{ env.Ver }}-8.1-x86-nts.7z"
+#       #    token: ${{ secrets.GITHUB_TOKEN }}
+#       #    tag: ${{ env.Ver }}
