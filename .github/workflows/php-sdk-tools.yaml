@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "vs env value is : ${{env.Vs}} "
       - name: get phpsdktools
-        run:|
+        run: |
           git clone https://github.com/microsoft/php-sdk-binary-tools.git
           cd php-sdk-binary-tools
           git checkout php-sdk-2.2.0
