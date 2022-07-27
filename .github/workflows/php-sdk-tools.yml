@@ -34,7 +34,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["8.0"]
+          version: ["7.0"]
           arch: [x64,x86]
           ts: [ts,nts]
 
@@ -56,6 +56,11 @@ jobs:
       - name: set envs
         run: |
           echo "vs env value is : ${{env.Vs}} "
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.arch}}
+          toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get phpsdktools
         run: |
           git clone https://github.com/microsoft/php-sdk-binary-tools.git
