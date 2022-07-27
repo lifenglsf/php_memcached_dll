@@ -60,7 +60,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: ${{matrix.arch}}
-          toolset: ${{steps.setup-php.outputs.toolset}}
+          toolset: ${{env.Vs}}
       - name: get phpsdktools
         run: |
           git clone https://github.com/microsoft/php-sdk-binary-tools.git
