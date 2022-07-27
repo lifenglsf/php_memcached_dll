@@ -56,16 +56,23 @@ jobs:
       - name: set envs
         run: |
           echo "vs env value is : ${{env.Vs}} "
+      - name: Setup PHP
+        id: setup-php
+        uses: cmb69/setup-php-sdk@v0.3
+        with:
+          version: ${{matrix.version}}
+          arch: ${{matrix.arch}}
+          ts: ${{matrix.ts}}
+          deps: zlib
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: ${{matrix.arch}}
-          toolset: 14.0
+          toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get phpsdktools
         run: |
-          git clone https://github.com/microsoft/php-sdk-binary-tools.git
-          cd php-sdk-binary-tools
-          git checkout php-sdk-2.2.0
+          dir /S 
+          cd php-sdk
           phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           cd bin
           phpsdk_buildtree.bat php-${{matrix.version}}
