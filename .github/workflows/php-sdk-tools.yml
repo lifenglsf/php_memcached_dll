@@ -34,7 +34,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.0"]
+          version: ["7.4"]
           arch: [x64,x86]
           ts: [ts,nts]
 
