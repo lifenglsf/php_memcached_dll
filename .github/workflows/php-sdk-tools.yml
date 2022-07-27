@@ -71,7 +71,7 @@ jobs:
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get phpsdktools
         run: |
-          phpsdk_buildtree.bat ${{matrix.version}}-${{matrx.arch}}
+          phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           pwd
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
