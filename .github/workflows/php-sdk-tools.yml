@@ -58,7 +58,7 @@ jobs:
         run: |
           curl -L https://windows.php.net/downloads/releases/releases.json -o r.json
           content = `cat r.json`
-          version = ${{fromJSON(content}}).matrix.version.version}}
+          version = `echo $(jq -r '.${{maxtrix.version}}.version' <<< "$content")`
           echo "$version---aaaa"
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
