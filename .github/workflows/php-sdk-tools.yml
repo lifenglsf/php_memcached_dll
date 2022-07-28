@@ -55,7 +55,7 @@ jobs:
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
       - name: pwd
         run: |
-          dir
+          dir ${{matrix.version}}-${{matrix.arch}} /N
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
 #         with:
