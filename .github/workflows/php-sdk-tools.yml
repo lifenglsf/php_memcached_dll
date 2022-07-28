@@ -56,10 +56,9 @@ jobs:
       - name: pwd
         shell: powershell
         run: |
-          $baseurl = "https://windows.php.net/downloads/releases"
-          $url = "$baseurl/releases.json"
-          $releases = Invoke-WebRequest $url | ConvertFrom-Json
-          $phpversion = $releases.$matrix.version.version
+          curl -L hhttps://windows.php.net/downloads/releases/releases.json -o r.json
+          ${{version}} = ${{fromJSON(${{matrix.version}}.version)}}
+          echo "${{version}}---aaaa"
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
 #         with:
