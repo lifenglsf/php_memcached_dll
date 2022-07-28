@@ -56,7 +56,7 @@ jobs:
       - name: pwd
         shell: powershell
         run: |
-          curl -L https://windows.php.net/downloads/releases/releases.json -o r.json
+          curl  https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
