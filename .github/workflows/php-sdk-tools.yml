@@ -54,8 +54,13 @@ jobs:
           dir ../deps
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
       - name: pwd
+        shell: powershell
         run: |
-          dir ${{matrix.version}}-${{matrix.arch}} /N
+          cd ${{matrix.version}}-${{matrix.arch}}
+            $baseurl = "https://windows.php.net/downloads/releases"
+            $url = "$baseurl/releases.json"
+            $releases = Invoke-WebRequest $url | ConvertFrom-Json
+            $phpversion = $releases.$matrix.version.version
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
 #         with:
