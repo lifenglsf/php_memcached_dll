@@ -57,7 +57,7 @@ jobs:
         shell: powershell
         run: |
           curl -L hhttps://windows.php.net/downloads/releases/releases.json -o r.json
-          $version = ${{fromJSON(${{matrix.version}}.version)}}
+          $version = ${{fromJSON(${{matrix.version}}).version}}
           echo "$version---aaaa"
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
