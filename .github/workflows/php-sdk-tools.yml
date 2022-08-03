@@ -60,6 +60,9 @@ jobs:
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
+          cd ${{matrix.version}}-${{matrix.arch}}
+          mkdir deps
+          dir 
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
 #         with:
