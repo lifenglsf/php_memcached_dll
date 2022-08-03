@@ -60,7 +60,7 @@ jobs:
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
-          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o $version.zip
+          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}.zip
           dir
 #          cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
 #         
