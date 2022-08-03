@@ -61,9 +61,9 @@ jobs:
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
-          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o $version.zip
-          ls -alh
-#         7z x $version.zip o.\
+          curl https://windows.php.net/downloads/releases/php-${{version}}-src.zip -o ${{version}}.zip
+          ls .\${{version}}.zip
+#         7z x $version.zip o
 #         cd php-$version-src
 #          phpsdk_deps.bat -u
 #          dir
