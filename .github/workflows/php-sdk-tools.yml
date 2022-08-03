@@ -60,9 +60,12 @@ jobs:
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
-          cd ${{matrix.version}}-${{matrix.arch}}
-          mkdir deps
-          dir 
+          cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
+          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o $version.zip
+          7z x $version.zip -o.\
+          cd php-$version-src
+          phpsdk_deps.bat -u
+          
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
 #         with:
