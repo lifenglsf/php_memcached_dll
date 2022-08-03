@@ -54,7 +54,7 @@ jobs:
 #          dir ../deps
 #          phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
       - name: pwd
-#        shell: powershell
+        shell: powershell
         run: |
           curl  https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
