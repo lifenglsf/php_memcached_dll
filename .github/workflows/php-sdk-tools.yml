@@ -65,7 +65,7 @@ jobs:
           curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -o* -aoa
           dir 
-          cd php-$version-src
+          cd ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}
           phpsdk_deps.bat -u
           curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
           7z x ${{matrix.arch}}.zip -o..\deps -aoa
