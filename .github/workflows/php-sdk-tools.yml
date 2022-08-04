@@ -54,7 +54,7 @@ jobs:
         run: |
           dir ../deps
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
-      - name: pwd
+      - name: get php source and deps
         shell: powershell
         run: |
           curl  https://windows.php.net/downloads/releases/releases.json -o r.json
@@ -64,12 +64,15 @@ jobs:
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
           curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ext}} -o* -aoa
-          dir
-#         cd php-$version-src
-#          phpsdk_deps.bat -u
-#          dir
-#          cd php-$version-src
-#          phpsdk_deps.bat -u
+          cd php-$version-src
+          phpsdk_deps.bat -u
+          curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
+          7z x ${{matrix.arch}}.zip -o..\deps -aoa
+          curl https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
+          7z x m.zip -oext -aoa
+          dir ..\deps /N /S
+#          if(${{matrix.ext}} eq "igbinary"){
+#          }
           
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
