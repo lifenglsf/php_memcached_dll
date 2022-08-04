@@ -62,7 +62,7 @@ jobs:
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
-          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrux,ts}}-${{matrix.ext}}.zip
+          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           if(${{matrix.version}} -eq "7,4"){
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -o${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}} -aoa
           cd ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}
