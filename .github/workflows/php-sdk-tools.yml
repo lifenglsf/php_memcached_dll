@@ -17,7 +17,7 @@ jobs:
           version: ["7.4"]
           arch: [x64]
           ts: [ts,nts]
-
+          ext: ["basic","igbinary","msgpack"]
     steps:
       - name: vc15
         if: matrix.version=='7.4'
@@ -31,6 +31,7 @@ jobs:
         shell: powershell
       - name: set env
         run: |
+          echo ${{matrix.ext}}
           echo "vs env value is : $env:Vs "
         shell: powershell
       - name: set envs
@@ -61,8 +62,8 @@ jobs:
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
-          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}.zip
-          7z x ${{matrix.version}}-${{matrix.arch}}.zip -o* -aoa
+          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ext}}.zip
+          7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ext}} -o* -aoa
           dir
 #         cd php-$version-src
 #          phpsdk_deps.bat -u
