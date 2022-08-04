@@ -65,6 +65,7 @@ jobs:
           curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           if("${{matrix.version}}" -eq "7.4"){
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -o${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}} -aoa
+          dir
           cd ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}
           }else{
            7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -o* -aoa
