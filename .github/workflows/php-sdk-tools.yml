@@ -55,7 +55,7 @@ jobs:
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get vs info
         run: |
-          test-path "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.16.27023\bin\HostX64\x64\cl.exe"
+          ls "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.16.27023\bin\HostX64\x64\cl.exe"
           which cl.exe
       - name: get phpsdktools
         run: |
