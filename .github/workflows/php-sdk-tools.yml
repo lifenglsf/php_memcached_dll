@@ -49,6 +49,7 @@ jobs:
           deps: zlib
       - name: get vs info
         run: |
+          vswhere -nologo -version [15,16) -property installationPath -format text
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
