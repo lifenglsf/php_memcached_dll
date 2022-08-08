@@ -41,7 +41,7 @@ jobs:
           echo "vs env value is : ${{env.Vs}} "
       - name: Setup PHP
         id: setup-php
-        uses: cmb69/setup-php-sdk@v0.3
+        uses: cmb69/setup-php-sdk@v0.6
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
