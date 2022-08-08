@@ -54,14 +54,14 @@ jobs:
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           env
           curl  https://windows.php.net/downloads/releases/releases.json -o r.json
-          $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
-          $version = $CLRJson."${{matrix.version}}".version 
-          echo "$version---aaaa"
+          cat r.json| jq -r ".[\"${{matrix.version}}\"].version">version.txt
+          set /P version=<version.txt 
+          echo "%version%---aaaa"
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
           curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
           dir 
-          cd php-$version-src
+          cd php-%version%-src
           dir
           phpsdk_deps.bat -u
           curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
@@ -72,11 +72,11 @@ jobs:
           xcopy /S /E php-memcached-windows_msgpack_support .\ext\php-memcached
         
           
-          if(${{matrix.ext}} -eq "basic"){
+          if("${{matrix.ext}}" -eq "basic"){
             buildconf.bat
             configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json
           }
-          if(${{matrix.ext}} -eq "msgpack"){
+          if("${{matrix.ext}}" -eq "msgpack"){
            curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip -o.\
            xcopy /S /E msgpack-php-master ..\deps\include
@@ -85,7 +85,7 @@ jobs:
            buildconf.bat
            configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared
           }
-          if(${{matrix.ext}} -eq "igbinary"){
+          if("${{matrix.ext}}" -eq "igbinary"){
            curl -L https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
            7z x igbinary.zip -o.\
            xcopy /S /E igbinary-master ..\deps\include
