@@ -57,6 +57,7 @@ jobs:
         run: |
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
       - name: build tree
+        run: |
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
       - name: get php source and deps
         shell: powershell
