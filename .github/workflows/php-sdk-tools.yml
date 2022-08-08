@@ -55,9 +55,7 @@ jobs:
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get vs info
         run: |
-          vswhere -nologo -version [15,16) -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text
-          vswhere -nologo -version [15,16) -products Microsoft.VisualStudio.Product.BuildTools -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text
-          vswhere -nologo -version [15,16) -prerelease -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text
+          test-path "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.16.27023\bin\HostX64\x64\cl.exe"
           which cl.exe
       - name: get phpsdktools
         run: |
