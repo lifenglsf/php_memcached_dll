@@ -84,7 +84,7 @@ jobs:
             buildconf.bat
             configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json
           }
-          if(${{matrix.ext}} eq "msgpack"){
+          if(${{matrix.ext}} -eq "msgpack"){
            curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip -o.\
            xcopy /S /E msgpack-php-master ..\deps\include
@@ -93,7 +93,7 @@ jobs:
            buildconf.bat
            configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared
           }
-          if(${{matrix.ext}} eq "igbinary"){
+          if(${{matrix.ext}} -eq "igbinary"){
            curl -L https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
            7z x igbinary.zip -o.\
            xcopy /S /E igbinary-master ..\deps\include
