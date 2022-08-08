@@ -22,19 +22,19 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
-          setx vs "vc15"
+          setx ver "vc15"
       - name: vs16
         if: matrix.version!='7.4'
         run: |
-         setx vs "vs16"
-         echo "vs value %vs%"
+         setx ver "vs16"
+         echo "vs value %ver%"
       - name: set env
         run: |
           echo ${{matrix.ext}}
-          echo "vs env value is : --%vs%"
+          echo "vs env value is : --%ver%"
       - name: set envs
         run: |
-          echo "vs env value is : ${{env.Vs}} "
+          echo "vs env value is : ${{env.Vs}} ,,,,%ver% "
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
