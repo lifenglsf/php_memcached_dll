@@ -60,7 +60,7 @@ jobs:
           which cl.exe
       - name: get phpsdktools
         run: |
-          phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
+          php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
       - name: get php source and deps
         shell: powershell
