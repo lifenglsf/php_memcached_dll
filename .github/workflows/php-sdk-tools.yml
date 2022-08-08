@@ -19,6 +19,8 @@ jobs:
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
     steps:
+     
+          
       - name: vc15
         if: matrix.version=='7.4'
         run: |
@@ -45,6 +47,8 @@ jobs:
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
           deps: zlib
+      - name: get vs info
+        run: |
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
