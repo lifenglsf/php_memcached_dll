@@ -67,6 +67,7 @@ jobs:
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
           dir 
           cd php-$version-src
+          dir
           phpsdk_deps.bat -u
           curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
           7z x ${{matrix.arch}}.zip -o..\deps -aoa
