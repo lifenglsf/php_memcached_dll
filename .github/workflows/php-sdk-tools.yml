@@ -22,11 +22,11 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
-          setx vers "vc15"
+          echo "::set-env vers=vc15::$(($env:GITHUB_REF -split '/')[-1] -replace ' ','')"
       - name: vs16
         if: matrix.version!='7.4'
         run: |
-         setx vers "vs16"
+         echo "::set-env vers=vs16::$(($env:GITHUB_REF -split '/')[-1] -replace ' ','')"
          echo "vs value %vers%"
       - name: set env
         run: |
