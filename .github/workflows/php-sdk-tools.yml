@@ -55,8 +55,9 @@ jobs:
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get vs info
         run: |
-          vswhere -nologo -version [15,16) -property installationPath -format text
-          vswhere -nologo -version [15,17) -property installationPath -format text
+          vswhere -nologo -version [15,16) -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text
+          vswhere -nologo -version [15,16) -products Microsoft.VisualStudio.Product.BuildTools -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text
+          vswhere -nologo -version [15,16) -prerelease -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text
           which cl.exe
       - name: get phpsdktools
         run: |
