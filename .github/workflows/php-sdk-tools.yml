@@ -19,23 +19,18 @@ jobs:
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
     steps:
-     
-          
       - name: vc15
         if: matrix.version=='7.4'
         run: |
           echo "Vs=vc15" >> $env:GITHUB_ENV
-        shell: powershell
       - name: vs16
         if: matrix.version!='7.4'
         run: |
          echo "Vs=vs16" >> $env:GITHUB_ENV
-        shell: powershell
       - name: set env
         run: |
           echo ${{matrix.ext}}
           echo "vs env value is : $env:Vs "
-        shell: powershell
       - name: set envs
         run: |
           echo "vs env value is : ${{env.Vs}} "
@@ -47,14 +42,12 @@ jobs:
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
           deps: zlib
-   
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: ${{matrix.arch}}
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get php source and deps
-        shell: pwsh
         run: |
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
