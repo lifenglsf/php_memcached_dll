@@ -103,8 +103,8 @@ jobs:
             configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared
           }
       - name: nmake
-          run:|
-            nmake
+        run: |
+          nmake
 #       - name: Checkout memcached
 #         uses: actions/checkout@v3
 #         with:
