@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4"]
+          version: ["8.0"]
           arch: [x64]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
@@ -53,10 +53,6 @@ jobs:
         with:
           arch: ${{matrix.arch}}
           toolset: ${{steps.setup-php.outputs.toolset}}
-      - name: get vs info
-        run: |
-          ls "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.16.27023\bin\HostX64\x64\cl.exe"
-          which cl.exe
       - name: get phpsdktools
         run: |
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
@@ -78,7 +74,6 @@ jobs:
           7z x ${{matrix.arch}}.zip -o..\deps -aoa
           curl https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip -oext -aoa
-          dir ..\deps /N /S
 #          if(${{matrix.ext}} eq "igbinary"){
 #          }
           
