@@ -22,11 +22,11 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
-          set vs="vc15"
+          setx vs="vc15"
       - name: vs16
         if: matrix.version!='7.4'
         run: |
-         set vs="vs16"
+         setx vs="vs16"
          echo "vs value %vs%"
       - name: set env
         run: |
