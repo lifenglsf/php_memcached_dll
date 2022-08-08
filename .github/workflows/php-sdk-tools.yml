@@ -53,15 +53,11 @@ jobs:
         with:
           arch: ${{matrix.arch}}
           toolset: ${{steps.setup-php.outputs.toolset}}
-      - name: phpsdk environment
-        run: |
-          php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
-      - name: build tree
-        run: |
-          phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
       - name: get php source and deps
         shell: powershell
         run: |
+          php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
+          phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           curl  https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson."${{matrix.version}}".version 
