@@ -52,7 +52,7 @@ jobs:
           echo "copy cmdb deps to phpsource deps"
           xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
           echo "get latest php version"
-          curl  - https://windows.php.net/downloads/releases/releases.json -o r.json
+          curl   https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson."${{matrix.version}}".version 
           echo "$version---aaaa"
