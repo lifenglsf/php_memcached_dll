@@ -53,6 +53,7 @@ jobs:
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           env
+          curl  https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson.${{matrix.version}}.version 
           echo "$version---aaaa"
@@ -62,9 +63,10 @@ jobs:
           dir 
           cd php-%version%-src
           dir
-          phpsdk_deps.bat -u
+          xcopy ${{ github.workspace }}\deps ..\deps
+          dir ..\deps
           curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
-          7z x ${{matrix.arch}}.zip -o..\deps -aoa
+          7z x ${{matrix.arch}}.zip -o..\deps
           curl https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip -oext -aoa
           xcopy /S /E php-memcached-windows_msgpack_support ..\deps\include
