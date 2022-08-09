@@ -49,6 +49,7 @@ jobs:
         run: |
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
+          xcopy ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
           curl  https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson."${{matrix.version}}".version 
@@ -56,17 +57,13 @@ jobs:
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
           curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
-          dir 
           cd php-$version-src
-          dir
-          xcopy ..\${{ github.workspace }}\deps ..\deps
           dir ..\deps
           curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
           7z x ${{matrix.arch}}.zip -o..\deps
           curl https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip -oext
           xcopy /S /E ext\php-memcached-windows_msgpack_support ..\deps\include
-          xcopy /S /E ext\php-memcached-windows_msgpack_support .\ext\php-memcached
         
           
           if("${{matrix.ext}}" -eq "basic"){
@@ -74,7 +71,7 @@ jobs:
             configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json
           }
           if("${{matrix.ext}}" -eq "msgpack"){
-           curl -L https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+           curl  https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip -o.\
            xcopy /S /E msgpack-php-master ..\deps\include
            md.\ext\msgpack
@@ -83,7 +80,7 @@ jobs:
            configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared
           }
           if("${{matrix.ext}}" -eq "igbinary"){
-           curl -L https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
+           curl  https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
            7z x igbinary.zip -o.\
            xcopy /S /E igbinary-master ..\deps\include
            md.\ext\igbinary
