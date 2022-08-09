@@ -66,7 +66,6 @@ jobs:
           curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
           7z x ${{matrix.arch}}.zip -odeps
           xcopy /S /E /Y deps ..\deps
-          rmdir deps
           rm ${{matrix.arch}}.zip
           echo "get memcached ext source code"
           curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
