@@ -60,10 +60,11 @@ jobs:
           curl  https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
           cd php-$version-src
+          set PHP_SDK_VS=${{matrix.arch}}
           phpsdk_deps -u
           echo "get memcached dependency"
-          curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
-          dir
+          curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
+          ls ${{matrix.arch}}.zip
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "get memcached ext source code"
           curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
