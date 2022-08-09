@@ -10,7 +10,7 @@ jobs:
   ts74-x64-msgpack:
     defaults:
       run:
-        shell: cmd
+        shell: powershell
     runs-on: windows-2019
     strategy:
       matrix:
@@ -23,17 +23,10 @@ jobs:
         if: matrix.version=='7.4'
         run: |
           echo "Vs=vc15" >> $env:GITHUB_ENV
-        shell: powershell
       - name: vs16
         if: matrix.version!='7.4'
         run: |
          echo "Vs=vs16" >> $env:GITHUB_ENV
-        shell: powershell
-      - name: set env
-        run: |
-          echo ${{matrix.ext}}
-          env
-          echo "vs env value is : --%vers%"
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
@@ -48,7 +41,6 @@ jobs:
           arch: ${{matrix.arch}}
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get php source and deps
-        shell: powershell
         run: |
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
@@ -60,14 +52,14 @@ jobs:
           curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
           dir 
-          cd php-%version%-src
+          cd php-$version-src
           dir
           xcopy ${{ github.workspace }}\deps ..\deps
           dir ..\deps
           curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
           7z x ${{matrix.arch}}.zip -o..\deps
           curl https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
-          7z x m.zip -oext -aoa
+          7z x m.zip -oext
           xcopy /S /E php-memcached-windows_msgpack_support ..\deps\include
           xcopy /S /E php-memcached-windows_msgpack_support .\ext\php-memcached
         
