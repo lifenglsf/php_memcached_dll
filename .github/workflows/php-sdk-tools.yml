@@ -42,6 +42,8 @@ jobs:
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get php source and deps
         run: |
+          pwd
+          dir
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           curl  https://windows.php.net/downloads/releases/releases.json -o r.json
