@@ -50,7 +50,8 @@ jobs:
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           echo "copy cmdb deps to phpsource deps"
-          dir ..\deps /N /S
+          cd ..\deps\lib
+          dir
           xcopy ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
           echo "get latest php version"
           curl  - https://windows.php.net/downloads/releases/releases.json -o r.json
