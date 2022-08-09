@@ -34,7 +34,7 @@ jobs:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
-          deps: zlib,zip,libxml,libiconv
+          deps: zlib,zip,libxml,libiconv,libjpeg,edit,libssl,libzip
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -55,21 +55,24 @@ jobs:
           curl   https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson."${{matrix.version}}".version 
+          rm r.json
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
           echo "get latest php source code"
           curl  https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
+          rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           cd php-$version-src
-          set PHP_SDK_VS=${{matrix.arch}}
-          phpsdk_deps -u
           echo "get memcached dependency"
           curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
-          ls ${{matrix.arch}}.zip
-          7z x ${{matrix.arch}}.zip -o..\deps
+          7z x ${{matrix.arch}}.zip -odeps
+          xcopy /S /E /Y deps ..\deps
+          rmdir deps
+          rm ${{matrix.arch}}.zip
           echo "get memcached ext source code"
           curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip -oext
           xcopy /S /E /Y ext\php-memcached-windows_msgpack_support ..\deps\include
+          rm m.zip
           if("${{matrix.ext}}" -eq "basic"){
             .\buildconf.bat
             .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
@@ -78,7 +81,7 @@ jobs:
            curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip -o.\
            xcopy /S /E /Y msgpack-php-master ..\deps\include
-           xcopy /S /E /Y msgpack-php-master .\ext\msgpack
+           xcopy /S /E /Y msgpack-php-master ext\msgpack
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
           }
@@ -86,7 +89,7 @@ jobs:
            curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
            7z x igbinary.zip
            xcopy /S /E /Y igbinary-master ..\deps\include
-           xcopy /S /E /Y igbinary-master .\ext\igbinary
+           xcopy /S /E /Y igbinary-master ext\igbinary
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
           }
