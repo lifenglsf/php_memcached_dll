@@ -34,7 +34,7 @@ jobs:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
-          deps: zlib
+          deps: zlib,zip,libxml
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -50,22 +50,19 @@ jobs:
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           echo "copy cmdb deps to phpsource deps"
-          cd ..\deps\lib
-          dir
-          xcopy ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
+          xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
           echo "get latest php version"
           curl  - https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson."${{matrix.version}}".version 
           echo "$version---aaaa"
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
-          dir /N /S .\deps
           echo "get latest php source code"
           curl  https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
           cd php-$version-src
           echo "get memcached dependency"
-          curl   https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip    
+          curl   https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true    
           dir
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "get memcached ext source code"
