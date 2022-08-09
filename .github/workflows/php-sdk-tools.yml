@@ -52,43 +52,45 @@ jobs:
           echo "copy cmdb deps to phpsource deps"
           xcopy ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
           echo "get latest php version"
-          curl  https://windows.php.net/downloads/releases/releases.json -o r.json
+          curl  -Ls https://windows.php.net/downloads/releases/releases.json -o r.json
           $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
           $version = $CLRJson."${{matrix.version}}".version 
           echo "$version---aaaa"
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
+          dir /N /S .\deps
           echo "get latest php source code"
-          curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
+          curl -Ls https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
           cd php-$version-src
           echo "get memcached dependency"
-          curl  https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip           
+          curl  -Ls https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip    
+          dir
           7z x ${{matrix.arch}}.zip -o..\deps
           echo "get memcached ext source code"
-          curl https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
+          curl -Ls https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip -oext
           xcopy /S /E ext\php-memcached-windows_msgpack_support ..\deps\include
         
           
           if("${{matrix.ext}}" -eq "basic"){
             .\buildconf.bat
-            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json
+            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
           }
           if("${{matrix.ext}}" -eq "msgpack"){
-           curl  https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+           curl  -Ls https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip -o.\
            xcopy /S /E msgpack-php-master ..\deps\include
            xcopy /S /E msgpack-php-master .\ext\msgpack
            .\buildconf.bat
-           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared
+           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
           }
           if("${{matrix.ext}}" -eq "igbinary"){
-           curl  https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
-           7z x igbinary.zip -o.\
+           curl  -Ls https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
+           7z x igbinary.zip
            xcopy /S /E igbinary-master ..\deps\include
            xcopy /S /E igbinary-master .\ext\igbinary
            .\buildconf.bat
-           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared
+           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
           }
       - name: nmake
         run: |
