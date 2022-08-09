@@ -22,27 +22,18 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
-          set vers=vc15
-          env
-          setx /m versio vc15
-          env
+          echo "Vs=vc15" >> $env:GITHUB_ENV
+        shell: powershell
       - name: vs16
         if: matrix.version!='7.4'
         run: |
-         set vers=vs16
-         env
-         setx /m versio vs16
-         env
-         echo "vs value %vers%"
+         echo "Vs=vs16" >> $env:GITHUB_ENV
+        shell: powershell
       - name: set env
         run: |
           echo ${{matrix.ext}}
           env
           echo "vs env value is : --%vers%"
-      - name: set envs
-        run: |
-          echo "vs env value is : ${{env.Vs}} ,,,,%vers% "
-          env
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
@@ -57,14 +48,14 @@ jobs:
           arch: ${{matrix.arch}}
           toolset: ${{steps.setup-php.outputs.toolset}}
       - name: get php source and deps
+        shell: powershell
         run: |
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           env
-          curl  https://windows.php.net/downloads/releases/releases.json -o r.json
-          cat r.json| jq -r ".[\"${{matrix.version}}\"].version">version.txt
-          set /P version=<version.txt 
-          echo "%version%---aaaa"
+          $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
+          $version = $CLRJson.${{matrix.version}}.version 
+          echo "$version---aaaa"
           cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
           curl https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
