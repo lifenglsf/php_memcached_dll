@@ -78,7 +78,7 @@ jobs:
           }
           if("${{matrix.ext}}" -eq "msgpack"){
            curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
-           7z x msgpack.zip -o.\
+           7z x msgpack.zip 
            xcopy /S /E /Y msgpack-php-master ..\deps\include
            xcopy /S /E /Y msgpack-php-master ext\msgpack
            .\buildconf.bat
@@ -92,6 +92,7 @@ jobs:
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
           }
+          dir
           nmake
 #      - name: nmake
 #        run: |
