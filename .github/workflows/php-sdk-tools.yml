@@ -68,7 +68,7 @@ jobs:
           
           if("${{matrix.ext}}" -eq "basic"){
             .\buildconf.bat
-            configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json
+            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json
           }
           if("${{matrix.ext}}" -eq "msgpack"){
            curl  https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
@@ -77,7 +77,7 @@ jobs:
            md.\ext\msgpack
            xcopy /S /E msgpack-php-master .\ext\msgpack
            .\buildconf.bat
-           configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared
+           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared
           }
           if("${{matrix.ext}}" -eq "igbinary"){
            curl  https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
@@ -86,7 +86,7 @@ jobs:
            md.\ext\igbinary
            xcopy /S /E igbinary-master .\ext\igbinary
            .\buildconf.bat
-           configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared
+           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared
           }
       - name: nmake
         run: |
