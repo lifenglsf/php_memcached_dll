@@ -99,23 +99,8 @@ jobs:
           }
           dir
           nmake
-          $dd=""
-          $di=${{matrix.arch}}
-          if("$matrix.arch" -eq "x86"){
-            $ts="Release_TS"
-            if("${{matrix.ts}}" -eq "nts"){
-              $ts="Release"
-            }
-            $dd=".\"+$ts
-          }else{
-            $ts="Release_TS"
-            if("${{matrix.ts}}" -eq "nts"){
-              $ts="Release"
-            }
-            $dd=".\"+${{matrix.arch}}+"/"+$ts
-          }
-          echo $dd
-          dir $dd
+        
+          dir /N /S
 #      - name: nmake
 #        run: |
 #          nmake
