@@ -86,7 +86,7 @@ jobs:
            md .\ext\msgpack
            xcopy /S /E /Y msgpack-php-master ext\msgpack
            .\buildconf.bat
-           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
+           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
           }
           if("${{matrix.ext}}" -eq "igbinary"){
            curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
@@ -95,10 +95,26 @@ jobs:
            md .\ext\igbinary
            xcopy /S /E /Y igbinary-master ext\igbinary
            .\buildconf.bat
-           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
+           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
           }
           dir
           nmake
+          $dd=""
+          $di=${{matrix.arch}}
+          if("$matrix.arch" -eq "x86"){
+            $ts="Release_TS"
+            if("${{matrix.ts}}" -eq "nts"){
+              $ts="Release"
+            }
+            $dd=$ts
+          }else{
+            $ts="Release_TS"
+            if("${{matrix.ts}}" -eq "nts"){
+              $ts="Release"
+            }
+            $dd=${{matrix.arch}}+"/"+$ts
+          }
+          dir $dd
 #      - name: nmake
 #        run: |
 #          nmake
