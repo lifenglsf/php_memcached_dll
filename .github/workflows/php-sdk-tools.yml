@@ -83,6 +83,7 @@ jobs:
            curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip 
            xcopy /S /E /Y msgpack-php-master ..\deps\include
+           md .\ext\msgpack
            xcopy /S /E /Y msgpack-php-master ext\msgpack
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
@@ -91,6 +92,7 @@ jobs:
            curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
            7z x igbinary.zip
            xcopy /S /E /Y igbinary-master ..\deps\include
+           md .\ext\igbinary
            xcopy /S /E /Y igbinary-master ext\igbinary
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached -json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
