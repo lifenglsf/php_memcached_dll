@@ -106,14 +106,15 @@ jobs:
             if("${{matrix.ts}}" -eq "nts"){
               $ts="Release"
             }
-            $dd=$ts
+            $dd=".\"+$ts
           }else{
             $ts="Release_TS"
             if("${{matrix.ts}}" -eq "nts"){
               $ts="Release"
             }
-            $dd=${{matrix.arch}}+"/"+$ts
+            $dd=".\"+${{matrix.arch}}+"/"+$ts
           }
+          echo $dd
           dir $dd
 #      - name: nmake
 #        run: |
