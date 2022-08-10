@@ -72,8 +72,6 @@ jobs:
           7z x m.zip 
           xcopy /S /E /Y php-memcached-windows_msgpack_support ..\deps\include
           xcopy /S /E /Y php-memcached-windows_msgpack_support ext\php_memcached
-          dir ext
-          dir ..\deps\lib
           rm m.zip
           if("${{matrix.ext}}" -eq "basic"){
             .\buildconf.bat
@@ -84,7 +82,7 @@ jobs:
            7z x msgpack.zip 
            xcopy /S /E /Y msgpack-php-master ..\deps\include
            md .\ext\msgpack
-           xcopy /S /E /Y msgpack-php-master ext\msgpack
+           xcopy /S /E /Y msgpack-php-master .\ext\msgpack
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
           }
@@ -93,11 +91,11 @@ jobs:
            7z x igbinary.zip
            xcopy /S /E /Y igbinary-master ..\deps\include
            md .\ext\igbinary
-           xcopy /S /E /Y igbinary-master ext\igbinary
+           xcopy /S /E /Y igbinary-master .\ext\igbinary
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
           }
-          dir
+          dir ext
           nmake
         
           dir /N /S
