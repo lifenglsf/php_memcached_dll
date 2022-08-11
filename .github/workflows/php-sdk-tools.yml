@@ -68,7 +68,7 @@ jobs:
           xcopy /S /E /Y deps ..\deps
           rm ${{matrix.arch}}.zip
           dir
-          rmdir /S .\deps
+          remove-item .\deps -Recurse
           echo "get memcached ext source code"
           curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip 
@@ -76,7 +76,7 @@ jobs:
           md .\ext\php-memcached
           xcopy /S /E /Y php-memcached-windows_msgpack_support ext\php_memcached
           rm m.zip
-          rmdir /S .\php-memcached-windows_msgpack_support
+          remove-item .\php-memcached-windows_msgpack_support -Recurse
           if("${{matrix.ext}}" -eq "basic"){
             .\buildconf.bat
             .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
@@ -85,7 +85,7 @@ jobs:
            curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip 
            xcopy /S /E /Y msgpack-php-master ..\deps\include
-           rmdir /S .\msgpack-php-master
+           remove-item .\msgpack-php-master -Recurse
            md .\ext\msgpack
            xcopy /S /E /Y msgpack-php-master .\ext\msgpack
            .\buildconf.bat
@@ -97,7 +97,7 @@ jobs:
            xcopy /S /E /Y igbinary-master ..\deps\include
            md .\ext\igbinary
            xcopy /S /E /Y igbinary-master .\ext\igbinary
-           rmdir /S .\igbinary-master
+           remove-item .\igbinary-master -Recurse
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
           }
