@@ -68,7 +68,7 @@ jobs:
           xcopy /S /E /Y deps ..\deps
           rm ${{matrix.arch}}.zip
           dir
-          rmdir /S .\${{matrix.arch}}
+          rmdir /S .\deps
           echo "get memcached ext source code"
           curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip 
