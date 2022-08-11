@@ -85,9 +85,10 @@ jobs:
            curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
            7z x msgpack.zip 
            xcopy /S /E /Y msgpack-php-master ..\deps\include
-           remove-item .\msgpack-php-master -Recurse
            md .\ext\msgpack
            xcopy /S /E /Y msgpack-php-master .\ext\msgpack
+           remove-item .\msgpack-php-master -Recurse
+
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
           }
