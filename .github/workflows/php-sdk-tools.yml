@@ -73,8 +73,8 @@ jobs:
           curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
           7z x m.zip 
           xcopy /S /E /Y php-memcached-windows_msgpack_support ..\deps\include
-          md .\ext\php-memcached
-          xcopy /S /E /Y php-memcached-windows_msgpack_support ext\php_memcached
+          md .\ext\memcached
+          xcopy /S /E /Y php-memcached-windows_msgpack_support ext\memcached
           rm m.zip
           remove-item .\php-memcached-windows_msgpack_support -Recurse
           if("${{matrix.ext}}" -eq "basic"){
@@ -101,10 +101,8 @@ jobs:
            .\buildconf.bat
            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
           }
-          dir ext
+          dir ext\memcached
           nmake
-        
-          dir /N /S
 #      - name: nmake
 #        run: |
 #          nmake
