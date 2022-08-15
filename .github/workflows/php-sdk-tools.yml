@@ -6,6 +6,7 @@ env:
     Ver: windows_msgpack_support
     Mg: 2.2.0RC1
     Ig: 3.2.7
+    Pg: 3.2.0
 jobs:
   ts74-x64-msgpack:
     defaults:
@@ -104,6 +105,23 @@ jobs:
           }
           dir ext\memcached
           nmake
+  create_release:
+    needs: [ts74-x64-msgpack]
+    defaults:
+      run:
+        shell: cmd
+    runs-on: windows-2019
+    steps: 
+      - name: prepare release
+        shell: powershell
+        run: |
+          Get-ChildItem -Path ${{github.workspace}} -Recurse -Force
+#      - name: make release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          artifacts: "${{github.workspace}}\\php7.4-x64-ts.7z,${{github.workspace}}\\php8.0-x64-ts.7z,${{github.workspace}}\\php8.1-x64-ts.7z,${{github.workspace}}\\php7.4-x64-nts.7z,${{github.workspace}}\\php8.0-x64-nts.7z,${{github.workspace}}\\php8.1-x64-nts.7z,${{github.workspace}}\\php7.4-x86-ts.7z,${{github.workspace}}\\php8.0-x86-ts.7z,${{github.workspace}}\\php8.1-x86-ts.7z,${{github.workspace}}\\php7.4-x86-nts.7z,${{github.workspace}}\\php8.0-x86-nts.7z,${{github.workspace}}\\php8.1-x86-nts.7z"
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          tag: v${{env.Pg}}-auto
 #      - name: nmake
 #        run: |
 #          nmake
