@@ -80,7 +80,12 @@ jobs:
           remove-item .\php-memcached-windows_msgpack_support -Recurse
           if("${{matrix.ext}}" -eq "basic"){
             .\buildconf.bat
+            if("${{matrix.ts}}" -eq "nts"){
+            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --disabled-zts
+            }else{
             .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
+            }
+            
           }
           if("${{matrix.ext}}" -eq "msgpack"){
            curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
@@ -91,7 +96,12 @@ jobs:
            remove-item .\msgpack-php-master -Recurse
 
            .\buildconf.bat
-           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
+           if("${{matrix.ts}}" -eq "nts"){
+                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --disable-zts
+
+           }else{
+              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
+           }
           }
           if("${{matrix.ext}}" -eq "igbinary"){
            curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
@@ -101,31 +111,36 @@ jobs:
            xcopy /S /E /Y igbinary-master .\ext\igbinary
            remove-item .\igbinary-master -Recurse
            .\buildconf.bat
-           .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
+           if("${{matrix.ts}}" -eq "nts"){
+              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps --disbled-zts
+
+           }else{
+               .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
+          }
           }
           dir ext\memcached
           nmake
-          mkdir -p ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
-          copy ..\deps\bin\libmemcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+          mkdir -p ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+          copy ..\deps\bin\libmemcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
           if('${{matrix.arch}}' -eq 'x86'){
             if('${{matrix.ts}}' -eq 'nts'){
-              copy Release\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             }else{
-              copy Release_TS\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             }
           }else{
             if('${{matrix.ts}}' -eq 'nts'){
-              copy x64\Release\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy x64\Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             }else{
-              copy x64\Release_TS\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy x64\Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             }
           }
-          7z a ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}} ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}.7z
+          7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}} ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
       - name: Accidentally upload to the same artifact via multiple jobs
         uses: actions/upload-artifact@v3
         with:
-            name: php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
-            path: ${{ github.workspace }}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}.7z
+            name: ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+            path: ${{ github.workspace }}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
   create_release:
     needs: [ts74-x64-msgpack]
     defaults:
@@ -146,6 +161,7 @@ jobs:
             Foreach($a in $arch){
               Foreach($t in $ts){
                 Foreach($e in $ext){
+                  $tmp=${{env.Pg}}-$e-php$v-$t_$a
                   $filepath+=$tmp
                   $workspace+=${{ github.workspace }}
                 }
@@ -164,6 +180,13 @@ jobs:
       - name: test
         run: |
           dir
+          Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | ForeEach-Object --Process{
+            echo $_.name;
+            $dir = $_.name -replace "-","\"
+            mkdir -p $dir
+            7z x $_.name
+            copy $_.name\*.dll $dir
+          }
 
 #      - name: make release
 #        uses: ncipollo/release-action@v1
