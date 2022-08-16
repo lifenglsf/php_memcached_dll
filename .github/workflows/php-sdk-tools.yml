@@ -136,7 +136,7 @@ jobs:
             }
           }
           dir
-          7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z {{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
+          7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
       - name: Accidentally upload to the same artifact via multiple jobs
         uses: actions/upload-artifact@v3
         with:
