@@ -109,15 +109,15 @@ jobs:
           copy ..\deps\bin\libmemcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
           if('${{matrix.arch}}' -eq 'x86'){
             if('${{matrix.ts}}' -eq 'nts'){
-              copy Release\php-memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy Release\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
             }else{
-              copy Release_TS\php-memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy Release_TS\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
             }
           }else{
             if('${{matrix.ts}}' -eq 'nts'){
-              copy x64\Release\php-memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy x64\Release\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
             }else{
-              copy x64\Release_TS\php-memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
+              copy x64\Release_TS\php_memcached.dll ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}
             }
           }
           7z a ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}} ${{github.workspace}}\php-${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}-${{env.Pg}}.7z
