@@ -81,7 +81,7 @@ jobs:
           if("${{matrix.ext}}" -eq "basic"){
             .\buildconf.bat
             if("${{matrix.ts}}" -eq "nts"){
-            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --disabled-zts
+            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --disable-zts
             }else{
             .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
             }
