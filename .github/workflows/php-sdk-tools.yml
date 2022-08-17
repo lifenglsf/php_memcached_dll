@@ -162,7 +162,7 @@ jobs:
             Foreach($a in $arch){
               Foreach($t in $ts){
                 Foreach($e in $ext){
-                  $tmp=-join(${{env.Pg}},"-",$e,"-","php",$v,"-",$t,"_",$a)
+                  $tmp=-join("${{env.Pg}}","-",$e,"-","php",$v,"-",$t,"_",$a)
                   $filepath+=$tmp
                   $workspace+="${{ github.workspace }}"
                 }
@@ -177,7 +177,7 @@ jobs:
         uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
         with:
           names: ${{env.Release_path}}
-          paths: ${{env.workspace_path}}
+          paths: ${{env.Workspace_path}}
       - name: test
         run: |
           dir
