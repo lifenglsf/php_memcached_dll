@@ -164,7 +164,7 @@ jobs:
                 Foreach($e in $ext){
                   $tmp=-join(${{env.Pg}},"-",$e,"-","php",$v,"-",$t,"_",$a)
                   $filepath+=$tmp
-                  $workspace+=${{ github.workspace }}
+                  $workspace+="${{ github.workspace }}"
                 }
               }
             }
@@ -188,6 +188,7 @@ jobs:
             7z x $_.name
             copy $_.name\*.dll $dir
           }
+          dir
 
 #      - name: make release
 #        uses: ncipollo/release-action@v1
