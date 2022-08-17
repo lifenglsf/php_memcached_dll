@@ -112,7 +112,7 @@ jobs:
            remove-item .\igbinary-master -Recurse
            .\buildconf.bat
            if("${{matrix.ts}}" -eq "nts"){
-              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps --disbled-zts
+              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps --disble-zts
 
            }else{
                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
