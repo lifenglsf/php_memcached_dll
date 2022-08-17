@@ -162,7 +162,7 @@ jobs:
             Foreach($a in $arch){
               Foreach($t in $ts){
                 Foreach($e in $ext){
-                  $tmp=${{env.Pg}}-$e-php$v-$t_$a
+                  $tmp=join(${{env.Pg}},"-",$e,"-",php",$v,"-",$t,"_",$a)
                   $filepath+=$tmp
                   $workspace+=${{ github.workspace }}
                 }
