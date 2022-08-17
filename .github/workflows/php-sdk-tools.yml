@@ -171,7 +171,7 @@ jobs:
           }
           $rpath=$filepath -join " "
           $wpath=$workspace -join " "
-          echo "Relase_path=$rpath" >> $env:GITHUB_ENV
+          echo "Release_path=$rpath" >> $env:GITHUB_ENV
           echo "Workspace_path=$wpath" >> $env:GITHUB_ENV
       - name : download artifact
         uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
@@ -188,7 +188,7 @@ jobs:
             7z x $_.name
             copy $_.name\*.dll $dir
           }
-          dir
+          Get-ChildItem -Path ${{ github.workspace }} -recurse
 
 #      - name: make release
 #        uses: ncipollo/release-action@v1
