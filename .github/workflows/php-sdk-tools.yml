@@ -177,7 +177,7 @@ jobs:
         uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
         with:
           names: ${{env.Release_path}}
-          paths: ${{env.Workspace}}
+          paths: ${{env.workspace_path}}
       - name: test
         run: |
           dir
