@@ -185,13 +185,13 @@ jobs:
           Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | Foreach-Object {
             echo $_.name;
             $dir = $_.name -replace "-","\"
-            $dir = $dir -replace ".7z",""
+            $dir = "auto"+"-"+$dir -replace ".7z",""
             $oname=$_.name -replace ".7z",""
             echo "oname:$oname"
             mkdir -p $dir
             7z x $_.name
             Get-ChildItem -Path ${{ github.workspace }} -recurse
-            copy $oname\*.dll $dir
+            Move-Item -Path .\*.dll -Destination $dir
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
 
