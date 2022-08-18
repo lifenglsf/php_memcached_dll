@@ -182,7 +182,7 @@ jobs:
         shell: powershell
         run: |
           dir
-          Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | ForeEach-Object --Process{
+          Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | ForEach-Object --Process{
             echo $_.name;
             $dir = $_.name -replace "-","\"
             mkdir -p $dir
