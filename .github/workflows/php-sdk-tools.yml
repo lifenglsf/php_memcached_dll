@@ -190,6 +190,7 @@ jobs:
             echo "oname:$oname"
             mkdir -p $dir
             7z x $_.name
+            Get-ChildItem -Path ${{ github.workspace }} -recurse
             copy $oname\*.dll $dir
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
