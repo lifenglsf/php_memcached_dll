@@ -195,6 +195,7 @@ jobs:
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
       - name: git commit   
+        run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git pull origin master && git add auto-* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
