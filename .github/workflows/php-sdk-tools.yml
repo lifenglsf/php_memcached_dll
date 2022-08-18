@@ -186,6 +186,8 @@ jobs:
             echo $_.name;
             $dir = $_.name -replace "-","\"
             $dir = $dir -replace ".7z",""
+            $oname=$_.name -replace ".7z",""
+            echo "oname:$oname"
             mkdir -p $dir
             7z x $_.name
             copy $_.name\*.dll $dir
