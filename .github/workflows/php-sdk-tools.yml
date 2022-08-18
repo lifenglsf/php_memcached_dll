@@ -179,6 +179,7 @@ jobs:
           names: ${{env.Release_path}}
           paths: ${{env.Workspace_path}}
       - name: test
+        shell: powershell
         run: |
           dir
           Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | ForeEach-Object --Process{
