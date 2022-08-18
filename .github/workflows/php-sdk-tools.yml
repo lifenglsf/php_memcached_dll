@@ -182,9 +182,10 @@ jobs:
         shell: powershell
         run: |
           dir
-          Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | ForEach-Object --Process{
+          Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | Foreach-Object {
             echo $_.name;
             $dir = $_.name -replace "-","\"
+            $dir = $dir -replace ".7z",""
             mkdir -p $dir
             7z x $_.name
             copy $_.name\*.dll $dir
