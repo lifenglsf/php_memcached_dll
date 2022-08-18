@@ -194,13 +194,16 @@ jobs:
             Move-Item -Path .\*.dll -Destination $dir
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
-
-#      - name: make release
-#        uses: ncipollo/release-action@v1
-#        with:
-#          artifacts: "${{env.release_path}}"
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          tag: v${{env.Pg}}-auto
+      - name: git commit   
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git pull origin master && git add auto-* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
+      - name: make release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{env.Pg}}-auto
+          prerelease: true
 #      - name: nmake
 #        run: |
 #          nmake
