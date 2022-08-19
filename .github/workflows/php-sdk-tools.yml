@@ -15,10 +15,10 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4"]
-          arch: [x86]
-          ts: [nts]
-          ext: ["basic"]
+          version: ["7.4","8.0","8.1"]
+          arch: [x64,x86]
+          ts: [ts,nts]
+          ext: ["basic","igbinary","msgpack"]
     steps:
       - name: vc15
         if: matrix.version=='7.4'
@@ -165,10 +165,10 @@ jobs:
       - name: prepare release
         shell: powershell
         run: |
-          $version="7.4"
-          $arch="x86"
-          $ts="nts"
-          $ext="basic"
+          $version="7.4","8.0","8.1"
+          $arch="x64","x86"
+          $ts="ts","nts"
+          $ext="basic","igbinary","msgpack"
           $filepath=@()
           $workspace = @()
           Foreach($v in $version){
@@ -206,6 +206,8 @@ jobs:
             Remove-Item '.\ucrtbased.dll'
             Get-ChildItem -Path ${{ github.workspace }}\*.dll
             Move-Item -Path .\libmemcached.dll  -Destination $dir
+            Move-Item -Path .\php_memcached.dll  -Destination $dir
+
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
       - name: git commit   
