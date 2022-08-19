@@ -83,6 +83,10 @@ TodList
 - [x] Automatically compile the base version
 - [ ] Automatically compile msgpack based versions
 - [ ] Automatically compile igbinary based versions
+- [ ] Automatically get latest php-memcached version
+- [ ] Automatically get latest msgpack version
+- [ ] Automatically get latest igbinary version
+
 
 
     
