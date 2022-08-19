@@ -203,15 +203,16 @@ jobs:
             echo "oname:$oname"
             mkdir -p $dir
             7z x $_.name
+            del ucrtbased.dll
             Get-ChildItem -Path ${{ github.workspace }}\*.dll
-            Move-Item -Path *.dll -exclude ucrtbased.dll -Destination $dir
+            Move-Item -Path .\libmemcached.dll  -Destination $dir
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
       - name: git commit   
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git pull origin master && git add auto-* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
+          git pull origin master && git add auto-${{env.Pg}}* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
       - name: delete_tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
