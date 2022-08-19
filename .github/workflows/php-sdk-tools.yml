@@ -204,7 +204,7 @@ jobs:
             mkdir -p $dir
             7z x $_.name
             Get-ChildItem -Path ${{ github.workspace }} -recurse
-            Move-Item -Path .\libmemcached.dll .\php_memcached.dll -Destination $dir
+            Move-Item -Path libmemcached.dll php_memcached.dll -Destination $dir
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
       - name: git commit   
