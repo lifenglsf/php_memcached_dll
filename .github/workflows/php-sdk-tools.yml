@@ -203,7 +203,7 @@ jobs:
             echo "oname:$oname"
             mkdir -p $dir
             7z x $_.name
-            del ucrtbased.dll
+            Remove-Item '.\ucrtbased.dll'
             Get-ChildItem -Path ${{ github.workspace }}\*.dll
             Move-Item -Path .\libmemcached.dll  -Destination $dir
           }
