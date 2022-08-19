@@ -166,8 +166,8 @@ jobs:
         shell: powershell
         run: |
           $version="7.4","8.0","8.1"
-          $arch=x64,x86
-          $ts=ts,nts
+          $arch="x64","x86"
+          $ts="ts","nts"
           $ext="basic","igbinary","msgpack"
           $filepath=@()
           $workspace = @()
