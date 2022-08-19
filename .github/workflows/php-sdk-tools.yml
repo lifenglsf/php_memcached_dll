@@ -61,7 +61,7 @@ jobs:
           echo "get latest php source code"
           curl  https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           if("${{matrix.version}}" -eq "7.4"){
-                    tmp_path="php-"+$version+"-src"
+                    $tmp_path="php-"+$version+"-src"
                     echo "tmp_path:$tmp_path"
                     7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -o$tmp_path
 
