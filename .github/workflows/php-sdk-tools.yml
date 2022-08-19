@@ -15,8 +15,8 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["8.0"]
-          arch: [x64]
+          version: ["7.4","8.0","8.1"]
+          arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
     steps:
@@ -153,8 +153,8 @@ jobs:
       - name: prepare release
         shell: powershell
         run: |
-          $version="8.0"
-          $arch="x64"
+          $version="7.4","8.0","8.1"
+          $arch="x86","x64"
           $ts="ts","nts"
           $ext="basic","igbinary","msgpack"
           $filepath=@()
@@ -192,7 +192,7 @@ jobs:
             mkdir -p $dir
             7z x $_.name
             Get-ChildItem -Path ${{ github.workspace }} -recurse
-            Move-Item -Path .\*.dll -Destination $dir
+            Move-Item -Path .\libmemcached.dll .\php_memcached.dll -Destination $dir
           }
           Get-ChildItem -Path ${{ github.workspace }} -recurse
       - name: git commit   
@@ -200,6 +200,13 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git pull origin master && git add auto-* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
+      - name: delete_tag
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+         delete_release: true # default: false
+         tag_name: v${{env.Pg}}-auto # tag name to delete
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: make release
         uses: ncipollo/release-action@v1
         with:
