@@ -67,6 +67,7 @@ jobs:
                     7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
 
           }
+          Get-ChildItem -Path .
           rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
           cd php-$version-src
           echo "get memcached dependency"
