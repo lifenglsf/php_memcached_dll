@@ -149,6 +149,7 @@ jobs:
         shell: cmd
     runs-on: windows-2019
     steps: 
+      - uses: actions/checkout@v3
       - name: prepare release
         shell: powershell
         run: |
