@@ -196,11 +196,11 @@ jobs:
         run: |
           dir
           Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | Foreach-Object {
-            echo $_.name;
+            echo "filename:$_.name";
             $dir = $_.name -replace "-","\"
             $dir = "auto"+"-"+$dir -replace ".7z",""
             $oname=$_.name -replace ".7z",""
-            echo "oname:$oname"
+            echo "oname:$oname,dir:$dir"
             mkdir -p $dir
             7z x $_.name
             Remove-Item '.\ucrtbased.dll'
@@ -209,7 +209,6 @@ jobs:
             Move-Item -Path .\php_memcached.dll  -Destination $dir
 
           }
-          Get-ChildItem -Path ${{ github.workspace }} -recurse
       - name: git commit   
         run: |
           git config --local user.name "GitHub Actions"
