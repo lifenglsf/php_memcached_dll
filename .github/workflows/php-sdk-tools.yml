@@ -202,7 +202,7 @@ jobs:
             $dir = "auto"+"-"+$dir
             echo "oname:$oname,dir:$dir"
             $flag=(Test-Path $dir)
-            if($flg  -eq "False"){
+            if($flag  -eq "False"){
                 mkdir -p $dir
             }
             7z x $_.name
