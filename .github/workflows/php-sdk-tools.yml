@@ -197,9 +197,9 @@ jobs:
           dir
           Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | Foreach-Object {
             echo "filename:$_.name";
-            $dir = $_.name -replace "-","\"
-            $dir = "auto"+"-"+$dir -replace ".7z",""
             $oname=$_.name -replace ".7z",""
+            $dir = "auto"+"-"+$oname
+            $dir = $dir -replace "-","\"
             echo "oname:$oname,dir:$dir"
             mkdir -p $dir
             7z x $_.name
