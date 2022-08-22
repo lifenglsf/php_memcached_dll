@@ -202,6 +202,7 @@ jobs:
             $dir = "auto"+"-"+$dir
             echo "oname:$oname,dir:$dir"
             $flag=(Test-Path $dir)
+            echo "flag value $flag"
             if($flag  -eq "False"){
                 mkdir -p $dir
             }
