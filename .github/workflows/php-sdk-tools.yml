@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4"]
+          version: ["7.4","8.0","8.1"]
           arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
@@ -165,7 +165,7 @@ jobs:
       - name: prepare release
         shell: powershell
         run: |
-          $version="7.4"
+          $version="7.4","8.0","8.1"
           $arch="x64","x86"
           $ts="ts","nts"
           $ext="basic","igbinary","msgpack"
@@ -198,10 +198,13 @@ jobs:
           Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | Foreach-Object {
             echo "filename:$_.name";
             $oname=$_.name -replace ".7z",""
-            $dir = "auto"+"-"+$oname
             $dir = $dir -replace "-","\"
+            $dir = "auto"+"-"+$dir
             echo "oname:$oname,dir:$dir"
-            mkdir -p $dir
+            $flag=(Test-Path $dir)
+            if($flg  -eq "False"){
+                mkdir -p $dir
+            }
             7z x $_.name
             Remove-Item '.\ucrtbased.dll'
             Get-ChildItem -Path ${{ github.workspace }}\*.dll
