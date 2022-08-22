@@ -204,7 +204,7 @@ jobs:
             $flag=(Test-Path $dir)
             if($flg  -eq "False"){
                 mkdir -p $dir
-            }=
+            }
             7z x $_.name
             $fflag=(Test-Path '.\ucrtbased.dll')
             if($fflag -eq "True"){
