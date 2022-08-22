@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4","8.0","8.1"]
+          version: ["7.4"]
           arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
@@ -165,7 +165,7 @@ jobs:
       - name: prepare release
         shell: powershell
         run: |
-          $version="7.4","8.0","8.1"
+          $version="7.4"
           $arch="x64","x86"
           $ts="ts","nts"
           $ext="basic","igbinary","msgpack"
@@ -211,8 +211,8 @@ jobs:
                 Remove-Item '.\ucrtbased.dll'
             }
             Get-ChildItem -Path ${{ github.workspace }}\*.dll
-            Copy-Item -Path .\libmemcached.dll  -Destination $dir -Force 
-            Copy-Item -Path .\php_memcached.dll  -Destination $dir -Force
+            move /y libmemcached.dll $dir
+            move /y php_memcached.dll $dir
 
           }
       - name: git commit   
