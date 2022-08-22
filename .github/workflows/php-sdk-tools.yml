@@ -211,8 +211,8 @@ jobs:
                 Remove-Item '.\ucrtbased.dll'
             }
             Get-ChildItem -Path ${{ github.workspace }}\*.dll
-            Move-Item -Path .\libmemcached.dll  -Force -Destination $dir
-            Move-Item -Path .\php_memcached.dll -Force -Destination $dir
+            Move-Item -Path .\libmemcached.dll  -Destination $dir -Force 
+            Move-Item -Path .\php_memcached.dll  -Destination $dir -Force
 
           }
       - name: git commit   
