@@ -204,6 +204,9 @@ jobs:
             $flag=(Test-Path $dir)
             if($flg  -eq "False"){
                 mkdir -p $dir
+            }else{
+              remove-item $dir -Recurse
+              mkdir -p $dir
             }
             7z x $_.name
             $fflag=(Test-Path '.\ucrtbased.dll')
@@ -211,8 +214,8 @@ jobs:
                 Remove-Item '.\ucrtbased.dll'
             }
             Get-ChildItem -Path ${{ github.workspace }}\*.dll
-            move /y libmemcached.dll $dir
-            move /y php_memcached.dll $dir
+            Move-Item -Path .\libmemcached.dll  -Force -Destination $dir
+            Move-Item -Path .\php_memcached.dll -Force -Destination $dir
 
           }
       - name: git commit   
