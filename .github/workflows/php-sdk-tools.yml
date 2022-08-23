@@ -165,6 +165,8 @@ jobs:
       - name: prepare release
         shell: powershell
         run: |
+          curl   https://api.github.com/repos/lifenglsf/php_memcached_dll/actions/artifacts -o r.json
+          Get-Content -Raw -Path "r.json"
           $version="7.4","8.0","8.1"
           $arch="x64","x86"
           $ts="ts","nts"
