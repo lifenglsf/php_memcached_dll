@@ -28,6 +28,7 @@ jobs:
         if: matrix.version!='7.4'
         run: |
          echo "Vs=vs16" >> $env:GITHUB_ENV
+         echo "github runner_id ${{github.runn_id}}"
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
@@ -44,7 +45,7 @@ jobs:
       - name : show deps
         shell: cmd
         run: |
-          echo "github runner_id ${{github.runner_id}}"
+          
           dir /N /S ..\deps
           
       - name: get php source and deps
@@ -156,7 +157,6 @@ jobs:
             name: ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             path: ${{ github.workspace }}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
   create_release:
-    needs: [ts74-x64-msgpack]
     defaults:
       run:
         shell: cmd
@@ -166,7 +166,7 @@ jobs:
       - name: prepare release
         shell: powershell
         run: |
-          curl   https://api.github.com/repos/lifenglsf/php_memcached_dll/actions/artifacts -o r.json
+          curl   https://api.github.com/repos/lifenglsf/php_memcached_dll/actions/artifacts/${{github.runn_id}} -o r.json
           Get-Content -Raw -Path "r.json"
           $version="7.4","8.0","8.1"
           $arch="x64","x86"
