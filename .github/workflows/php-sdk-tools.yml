@@ -157,6 +157,10 @@ jobs:
         with:
             name: ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             path: ${{ github.workspace }}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
+      - name: show env
+        run: |
+          echo "action runtime url=$ACTIONS_RUNTIME_URL"
+          env
   create_release:
     needs: [ts74-x64-msgpack]
     defaults:
