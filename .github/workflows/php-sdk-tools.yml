@@ -27,6 +27,7 @@ jobs:
       - name: vs16
         if: matrix.version!='7.4'
         run: |
+         env
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
       - name: Setup PHP
