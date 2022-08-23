@@ -203,7 +203,7 @@ jobs:
             echo "oname:$oname,dir:$dir"
             $flag=(Test-Path $dir)
             echo "flag value $flag"
-            if($flag  -neq "True"){
+            if(-not ($flag)){
                 echo "dir not exists"
                 mkdir -p $dir
             }else{
@@ -211,7 +211,7 @@ jobs:
             }
             7z x $_.name
             $fflag=(Test-Path '.\ucrtbased.dll')
-            if($fflag -eq "True"){
+            if($fflag){
                 Remove-Item '.\ucrtbased.dll'
             }
             Get-ChildItem -Path $path -Recurse
