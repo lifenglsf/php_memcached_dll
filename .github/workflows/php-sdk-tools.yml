@@ -36,7 +36,7 @@ jobs:
           script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
       - name: show env
         run: |
-          echo "action runtime url=$ACTIONS_RUNTIME_URL"
+          echo "action runtime url=${{ACTIONS_RUNTIME_URL}}"
           env
       - name: Setup PHP
         id: setup-php
