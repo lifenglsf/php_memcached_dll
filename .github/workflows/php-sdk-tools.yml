@@ -28,7 +28,7 @@ jobs:
         if: matrix.version!='7.4'
         run: |
          echo "Vs=vs16" >> $env:GITHUB_ENV
-         echo "github runner_id ${{github.runn_id}}"
+         echo "github runner_id ${{github.run_id}}"
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
