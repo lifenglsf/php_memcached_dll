@@ -214,8 +214,8 @@ jobs:
             if($fflag){
                 Remove-Item '.\ucrtbased.dll'
             }
-            move-item -path  libmemcached.dll destination $dir -force
-            move-item -path php_memcached.dll destination $dir -force
+            move-item -path  libmemcached.dll -destination $dir -force
+            move-item -path php_memcached.dll -destination $dir -force
 
           }
       - name: git commit   
