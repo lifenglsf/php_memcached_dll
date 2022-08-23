@@ -44,6 +44,7 @@ jobs:
       - name : show deps
         shell: cmd
         run: |
+          echo "github runner_id ${{github.runner_id}}"
           dir /N /S ..\deps
           
       - name: get php source and deps
