@@ -30,6 +30,14 @@ jobs:
          env
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
+      - name: Setup the Artifact API environment
+        uses: actions/github-script@v6
+        with:
+          script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
+      - name: show env
+        run: |
+          echo "action runtime url=$ACTIONS_RUNTIME_URL"
+          env
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
@@ -157,10 +165,7 @@ jobs:
         with:
             name: ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             path: ${{ github.workspace }}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
-      - name: show env
-        run: |
-          echo "action runtime url=$ACTIONS_RUNTIME_URL"
-          env
+     
   create_release:
     needs: [ts74-x64-msgpack]
     defaults:
@@ -231,7 +236,7 @@ jobs:
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git pull origin master && git add auto-${{env.Pg}}* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
+          git add auto-${{env.Pg}}* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
       - name: delete_tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
