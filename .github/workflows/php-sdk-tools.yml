@@ -201,11 +201,11 @@ jobs:
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
           $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header|ConvertTo-json
-          echo "response:$response"
-          $value=$response.value
-          $count=$response.count
-          echo "count:$count,value:$value"
-
+          $value = $response|select-object -ExpandProperty "value"
+          for($tmp in $value){
+            echo "items name:$value.name"
+            echo "items url:$value.url"
+          }
 #          curl "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -H "Authorization：Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" >a.json
 #          cat a.json
         
