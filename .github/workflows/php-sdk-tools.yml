@@ -40,9 +40,10 @@ jobs:
           $header=@{
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
-          Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header >a.json
-          $response = Get-Content -Raw -Path "a.json" | ConvertFrom-Json
+          Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header >a.json
           cat a.json
+
+          $response = Get-Content -Raw -Path "a.json" | ConvertFrom-Json
           echo "response =$response"
           $count = $response.count
           echo "count value $count"
