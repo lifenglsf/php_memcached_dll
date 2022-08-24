@@ -200,6 +200,8 @@ jobs:
           $wpath=$workspace -join " "
           echo "Release_path=$rpath" >> $env:GITHUB_ENV
           echo "Workspace_path=$wpath" >> $env:GITHUB_ENV
+          curl ${{ env.ACTIONS_RUNTIME_URL }}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview -o a.json
+          cat a.json
       - name : download artifact
         uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
         with:
