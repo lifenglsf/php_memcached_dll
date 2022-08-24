@@ -41,7 +41,7 @@ jobs:
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
           $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
-          echo "response =$response"
+          echo "response =$response.content"
           $json=convertto-Json $response
           $count = $json.count
           echo "json value $json"
