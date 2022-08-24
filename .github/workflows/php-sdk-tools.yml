@@ -45,7 +45,8 @@ jobs:
           echo "response =$response"
           $json=convertto-Json $response
           $count = $json.count
-          echo "json value $count"
+          echo "json value $json"
+          echo "count value $count"
           env
       - name: Setup PHP
         id: setup-php
