@@ -42,6 +42,7 @@ jobs:
           }
           Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header >a.json
           $response = Get-Content -Raw -Path "a.json" | ConvertFrom-Json
+          cat a.json
           echo "response =$response"
           $count = $response.count
           echo "count value $count"
