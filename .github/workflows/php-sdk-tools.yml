@@ -30,7 +30,19 @@ jobs:
          env
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
-      
+      - name: Setup the Artifact API environment
+        uses: actions/github-script@v6
+        with:
+          script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
+      - name: show env
+        run: |
+          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
+          $header=@{
+          "Content-Type":"application/json"，
+          "Authorization: Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
+          }
+          curl -uri "https://pipelines.actions.githubusercontent.com/xg6fZr4Bt35nnxOo1UsUTa0kRRIp8UnO9nHg125RlYXGOnbTe3/_apis/pipelines/workflows/2916196733/artifacts?api-version=6.0-preview" -h$header
+          env
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
