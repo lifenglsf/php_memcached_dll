@@ -45,7 +45,7 @@ jobs:
           $content = $response.content
           $rc=$response.rawContent
           echo "$content,$rc"
-          $json = ConvertFrom-Json  $response
+          $json = ConvertTo-Json  $response
           
           $count = $json.count
           $value=$json.value
