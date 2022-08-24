@@ -30,14 +30,7 @@ jobs:
          env
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
-      - name: Setup the Artifact API environment
-        uses: actions/github-script@v6
-        with:
-          script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
-      - name: show env
-        run: |
-          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
-          env
+      
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
@@ -174,6 +167,14 @@ jobs:
     runs-on: windows-2019
     steps: 
       - uses: actions/checkout@v3
+      - name: Setup the Artifact API environment
+        uses: actions/github-script@v6
+        with:
+          script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
+      - name: show env
+        run: |
+          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
+          env
       - name: prepare release
         shell: powershell
         run: |
