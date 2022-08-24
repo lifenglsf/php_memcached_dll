@@ -42,6 +42,8 @@ jobs:
           }
           $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
           $response|get-member
+          $counts = $response|Get-PropertyByName "count"
+          echo "counts:$counts"
           echo "response =$response"
           $content = $response.content
           $rc=$response.rawContent
@@ -51,7 +53,6 @@ jobs:
           $count = $json.count
           $value=$json.value
           echo "count value $count,value $value"
-          env
       - name: Setup PHP
         id: setup-php
         uses: cmb69/setup-php-sdk@v0.6
