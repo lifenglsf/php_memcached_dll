@@ -41,7 +41,7 @@ jobs:
           "Content-Type"="application/json"
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
-          Invoke-RestMethod -Method Get -Uri  "$env{{ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
+          Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
           env
       - name: Setup PHP
         id: setup-php
