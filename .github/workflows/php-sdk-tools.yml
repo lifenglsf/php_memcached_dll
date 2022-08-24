@@ -44,7 +44,7 @@ jobs:
           echo "response =$response"
           $count = $response.count
           value=$response.value
-          echo "count value $count,value=$value"
+          echo "count value $count"
           env
       - name: Setup PHP
         id: setup-php
