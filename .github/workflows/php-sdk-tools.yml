@@ -38,7 +38,6 @@ jobs:
         run: |
           echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
           $header=@{
-          "Content-Type"="application/json"
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
           $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
