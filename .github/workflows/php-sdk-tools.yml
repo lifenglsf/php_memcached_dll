@@ -190,12 +190,13 @@ jobs:
         run: |
           echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
           $header=@{
-          "Content-Type"="application/json"
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
-          $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
+          $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header -ContentType "application/json" |ConvertTo-Json -Depth 10
           echo "response =$response"
-          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
+          $count = $response|select-object -property count
+          $value=$response.value
+          echo "count value $count,value $value"
           env
       - name: prepare release
         shell: powershell
