@@ -192,11 +192,20 @@ jobs:
         with:
           script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
       - name: show env
+        shell: powershell
         run: |
           echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
-    
-          curl "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -H "Authorization：Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" >a.json
-          cat a.json
+          $header=@{
+          "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
+          }
+          $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header|ConvertTo-json
+          echo "response:$response"
+          $value=$response.value
+          $count=$response.count
+          echo "count:$count,value:$value"
+
+#          curl "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -H "Authorization：Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" >a.json
+#          cat a.json
         
           
       - name: prepare release
