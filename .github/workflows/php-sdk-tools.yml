@@ -38,10 +38,10 @@ jobs:
         run: |
           echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
           $header=@{
-          "Content-Type"="application/json"，
+          "Content-Type"="application/json"
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
-          curl -uri "https://pipelines.actions.githubusercontent.com/xg6fZr4Bt35nnxOo1UsUTa0kRRIp8UnO9nHg125RlYXGOnbTe3/_apis/pipelines/workflows/2916196733/artifacts?api-version=6.0-preview" -h$header
+          curl  "https://pipelines.actions.githubusercontent.com/xg6fZr4Bt35nnxOo1UsUTa0kRRIp8UnO9nHg125RlYXGOnbTe3/_apis/pipelines/workflows/2916196733/artifacts?api-version=6.0-preview" -H"Authorization:Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           env
       - name: Setup PHP
         id: setup-php
