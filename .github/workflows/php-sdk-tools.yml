@@ -44,7 +44,8 @@ jobs:
           $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}/_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
           echo "response =$response"
           $json=convertto-Json $response
-          echo "json value $json.count"
+          $count = $json.count
+          echo "json value $count"
           env
       - name: Setup PHP
         id: setup-php
