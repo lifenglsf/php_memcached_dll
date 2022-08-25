@@ -203,11 +203,10 @@ jobs:
           $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header|ConvertTo-json
           $json = $response|ConvertFrom-Json
           echo "json value $json"
-          $value = $response.value
-          $count=$response.count
+          $value = $json|select-object -ExpandProperty "value"
+          $count=$json|select-object -ExpandProperty "count"
           echo "nums:$count"
-          $objtype=$response.GetType().Name
-          echo "response type:$objtype"
+          echo "value:$value"
           Foreach($tmp in $value){
             echo "tmp value:$tmp"
             echo "items name:$value.name"
