@@ -208,12 +208,15 @@ jobs:
           echo "nums:$count"
           echo "value:$value"
           Foreach($tmp in $value){
-            echo "tmp value:$tmp"
             $aname=$tmp|select-object -ExpandProperty "name"
             $aurl=$tmp|select-object -ExpandProperty "url"
 
             echo "items name:$aname"
             echo "items url:$aurl"
+            Invoke-RestMethod -Method Get -Uri  "$aurl" -Headers $header -OutFile $aname.zip
+            Get-ChildItem -Path ${{ github.workspace }}
+            7z x $aname.zip
+            Get-ChildItem -Path ${{ github.workspace }}
           }
 #          curl "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -H "Authorization：Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" >a.json
 #          cat a.json
