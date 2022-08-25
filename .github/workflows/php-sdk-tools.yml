@@ -201,6 +201,8 @@ jobs:
           "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
           }
           $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header|ConvertTo-json
+          $objtype=$response.GetType().Name
+          echo "response type:$objtype"
           $value = $response|select-object -ExpandProperty "value"
           Foreach($tmp in $value){
             echo "tmp value:$tmp"
