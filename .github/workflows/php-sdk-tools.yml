@@ -207,7 +207,7 @@ jobs:
           echo "nums:$count"
           Foreach($tmp in $value){
             $aname=$tmp|select-object -ExpandProperty "name"
-            $aurl=$tmp|select-object -ExpandProperty "url"
+            $aurl=$tmp|select-object -ExpandProperty "fileContainerResourceUrl"
             echo "items name:$aname"
             echo "items url:$aurl"
             $r = Invoke-RestMethod -Method Get -Uri  "$aurl" -Headers $header
