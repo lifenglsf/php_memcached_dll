@@ -210,7 +210,8 @@ jobs:
             $aurl=$tmp|select-object -ExpandProperty "url"
             echo "items name:$aname"
             echo "items url:$aurl"
-            Invoke-RestMethod -Method Get -Uri  "$aurl" -Headers $header -OutFile ${{ github.workspace }}\$aname.zip
+            $r = Invoke-RestMethod -Method Get -Uri  "$aurl" -Headers $header
+            echo "responses:$r"
           }
           Get-ChildItem -Path ${{ github.workspace }}
 
