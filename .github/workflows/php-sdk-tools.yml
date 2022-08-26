@@ -211,7 +211,10 @@ jobs:
             echo "items name:$aname"
             echo "items url:$aurl"
             $r = Invoke-RestMethod -Method Get -Uri  "$aurl" -Headers $header
-            echo "responses:$r"
+            $itemsList = $r|select-object -ExpandProperty "value"
+            foreach($itemsList in $item){
+              echo "item:$item"
+            }
           }
           Get-ChildItem -Path ${{ github.workspace }}
 
