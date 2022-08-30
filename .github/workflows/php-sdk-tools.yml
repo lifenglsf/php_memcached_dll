@@ -215,7 +215,7 @@ jobs:
             echo "cc value $c"
             $itemsList = $r|select-object -ExpandProperty "value"
             foreach($items in $itemsList){
-              echo "item:$item"
+              echo "item:$items"
             }
           }
           Get-ChildItem -Path ${{ github.workspace }}
