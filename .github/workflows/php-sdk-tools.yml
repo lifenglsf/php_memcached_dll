@@ -216,6 +216,12 @@ jobs:
             $itemsList = $r|select-object -ExpandProperty "value"
             foreach($items in $itemsList){
               echo "item:$items"
+              $itemType=$items|select-object -ExpandProperty "itemType"
+              $contentLocation=$items|select-object -ExpandProperty "contentLocation"
+              if($itemType -eq "file"){
+                $file = Invoke-RestMethod -Method Get -Uri  "$contentLocation" -Headers $header
+                echo "file response $file"
+              }
             }
           }
           Get-ChildItem -Path ${{ github.workspace }}
