@@ -193,76 +193,76 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
-      - name: show env
-        shell: powershell
-        run: |
-          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
-          $header=@{
-          "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
-          }
-          $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header|ConvertTo-json
-          $json = $response|ConvertFrom-Json
-          $value = $json|select-object -ExpandProperty "value"
-          $count=$json|select-object -ExpandProperty "count"
-          echo "nums:$count"
-          Foreach($tmp in $value){
-            $aname=$tmp|select-object -ExpandProperty "name"
-            $aurl=$tmp|select-object -ExpandProperty "fileContainerResourceUrl"
-            echo "items name:$aname"
-            echo "items url:$aurl"
-            $r = Invoke-RestMethod -Method Get -Uri  "$aurl" -Headers $header
-            $c =$r|select-object -ExpandProperty "count"
-            echo "cc value $c"
-            $itemsList = $r|select-object -ExpandProperty "value"
-            foreach($items in $itemsList){
-              echo "item:$items"
-              $itemType=$items|select-object -ExpandProperty "itemType"
-              $contentLocation=$items|select-object -ExpandProperty "contentLocation"
-              if($itemType -eq "file"){
-                $file = Invoke-RestMethod -Method Get -Uri  "$contentLocation" -Headers $header
-                echo "file response $file"
-              }
-            }
-          }
-          Get-ChildItem -Path ${{ github.workspace }}
+#      - name: show env
+#        shell: powershell
+#        run: |
+#          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
+#          $header=@{
+#          "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
+#          }
+#          $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header|ConvertTo-json
+#          $json = $response|ConvertFrom-Json
+#          $value = $json|select-object -ExpandProperty "value"
+#          $count=$json|select-object -ExpandProperty "count"
+#          echo "nums:$count"
+#          Foreach($tmp in $value){
+#            $aname=$tmp|select-object -ExpandProperty "name"
+#            $aurl=$tmp|select-object -ExpandProperty "fileContainerResourceUrl"
+#            echo "items name:$aname"
+#            echo "items url:$aurl"
+#            $r = Invoke-RestMethod -Method Get -Uri  "$aurl" -Headers $header
+#            $c =$r|select-object -ExpandProperty "count"
+#            echo "cc value $c"
+#            $itemsList = $r|select-object -ExpandProperty "value"
+#            foreach($items in $itemsList){
+#              echo "item:$items"
+#              $itemType=$items|select-object -ExpandProperty "itemType"
+#              $contentLocation=$items|select-object -ExpandProperty "contentLocation"
+#              if($itemType -eq "file"){
+#                $file = Invoke-RestMethod -Method Get -Uri  "$contentLocation" -Headers $header
+#                echo "file response $file"
+#              }
+#            }
+#          }
+#          Get-ChildItem -Path ${{ github.workspace }}
 
 #          curl "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -H "Authorization：Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" >a.json
 #          cat a.json
         
           
-      - name: prepare release
-        shell: powershell
-        run: |
-          curl   https://api.github.com/repos/lifenglsf/php_memcached_dll/actions/runs/${{github.run_id}}/artifacts -o r.json
-          Get-Content -Raw -Path "r.json"
-          $version="7.4","8.0","8.1"
-          $arch="x64","x86"
-          $ts="ts","nts"
-          $ext="basic","igbinary","msgpack"
-          $filepath=@()
-          $workspace = @()
-          Foreach($v in $version){
-            Foreach($a in $arch){
-              Foreach($t in $ts){
-                Foreach($e in $ext){
-                  $tmp=-join("${{env.Pg}}","-",$e,"-","php",$v,"-",$t,"_",$a)
-                  $filepath+=$tmp
-                  $workspace+="${{ github.workspace }}"
-                }
-              }
-            }
-          }
-          $rpath=$filepath -join " "
-          $wpath=$workspace -join " "
-          echo "Release_path=$rpath" >> $env:GITHUB_ENV
-          echo "Workspace_path=$wpath" >> $env:GITHUB_ENV
-          curl ${{ env.ACTIONS_RUNTIME_URL }}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview -o a.json
-          cat a.json
+#      - name: prepare release
+#        shell: powershell
+#        run: |
+#          curl   https://api.github.com/repos/lifenglsf/php_memcached_dll/actions/runs/${{github.run_id}}/artifacts -o r.json
+#          Get-Content -Raw -Path "r.json"
+#          $version="7.4","8.0","8.1"
+#          $arch="x64","x86"
+#          $ts="ts","nts"
+#          $ext="basic","igbinary","msgpack"
+#          $filepath=@()
+#          $workspace = @()
+#          Foreach($v in $version){
+#            Foreach($a in $arch){
+#              Foreach($t in $ts){
+#                Foreach($e in $ext){
+#                  $tmp=-join("${{env.Pg}}","-",$e,"-","php",$v,"-",$t,"_",$a)
+#                  $filepath+=$tmp
+#                  $workspace+="${{ github.workspace }}"
+#                }
+#              }
+#            }
+#          }
+#          $rpath=$filepath -join " "
+#          $wpath=$workspace -join " "
+#          echo "Release_path=$rpath" >> $env:GITHUB_ENV
+#          echo "Workspace_path=$wpath" >> $env:GITHUB_ENV
+#          curl ${{ env.ACTIONS_RUNTIME_URL }}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview -o a.json
+#          cat a.json
       - name : download artifact
-        uses: marcofaggian/action-download-multiple-artifacts@v3.0.7
-        with:
-          names: ${{env.Release_path}}
-          paths: ${{env.Workspace_path}}
+        uses: actions/download-artifact@v3
+
+      - name: Display structure of downloaded files
+        run: ls -R
       - name: test
         shell: powershell
         run: |
