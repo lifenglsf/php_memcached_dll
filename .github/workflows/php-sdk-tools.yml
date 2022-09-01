@@ -266,6 +266,9 @@ jobs:
       - name: test
         shell: powershell
         run: |
+          echo "no filter"
+          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-* 
+          echo "has filter"
           Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-* -Filter "*.7z"|Foreach-Object{
             echo "filename:$_.name";
             $oname=$_.name -replace ".7z",""
