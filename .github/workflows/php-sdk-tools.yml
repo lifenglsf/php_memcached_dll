@@ -266,7 +266,7 @@ jobs:
       - name: test
         shell: powershell
         run: |
-          dir
+          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-* -Recurse
           Get-ChildItem -Path ${{ github.workspace }} -Filter *.7z | Foreach-Object {
             echo "filename:$_.name";
             $oname=$_.name -replace ".7z",""
