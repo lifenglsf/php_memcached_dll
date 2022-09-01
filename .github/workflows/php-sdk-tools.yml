@@ -260,16 +260,17 @@ jobs:
 #          cat a.json
       - name : download artifact
         uses: actions/download-artifact@v3
+        with: 
+          path: ${{env.Pg}}-artifacts
 
       - name: Display structure of downloaded files
         run: ls -R
       - name: test
         shell: powershell
         run: |
-          echo "no filter"
-          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-* 
-          echo "has filter"
-          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-* -Filter "*.7z"|Foreach-Object{
+          
+          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts 
+          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts -Filter "*.7z"|Foreach-Object{
             echo "filename:$_.name";
             $oname=$_.name -replace ".7z",""
             $dir = $oname -replace "-","\"
