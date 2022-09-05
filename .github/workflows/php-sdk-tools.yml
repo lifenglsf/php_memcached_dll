@@ -271,8 +271,8 @@ jobs:
           
           Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts  -Recurse -Filter "*.7z"
           Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts -Recurse -Filter "*.7z"|Foreach-Object{
-            echo "filename:$_.name";
-            $oname=$_.name -replace ".7z",""
+            echo "filename:$_,fullname:$_.fullname";
+            $oname=$_ -replace ".7z",""
             $dir = $oname -replace "-","\"
             $dir = "auto"+"-"+$dir
             echo "oname:$oname,dir:$dir"
@@ -284,7 +284,7 @@ jobs:
             }else{
               echo "dir exists"
             }
-            7z x $_.name
+            7z x $_.fullname
             $fflag=(Test-Path '.\ucrtbased.dll')
             if($fflag){
                 Remove-Item '.\ucrtbased.dll'
@@ -293,11 +293,15 @@ jobs:
             move-item -path php_memcached.dll -destination $dir -force
 
           }
+          remove-item ${{ github.workspace }}\${{env.Pg}}-artifacts -Recurse
       - name: git commit   
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git add auto-${{env.Pg}}* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
+          if (git status --porcelain) {
+            git add auto-${{env.Pg}}* && git commit -m "${{env.Pg}} automatic compilation" && git push origin master
+          }
+          
       - name: delete_tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
