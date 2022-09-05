@@ -271,7 +271,7 @@ jobs:
           
           Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts  -Recurse -Filter "*.7z"
           Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts -Recurse -Filter "*.7z"|Foreach-Object{
-            echo "filename:$_,fullname:$_.fullname";
+            echo "filename:$_";
             $oname=$_ -replace ".7z",""
             $dir = $oname -replace "-","\"
             $dir = "auto"+"-"+$dir
@@ -284,7 +284,7 @@ jobs:
             }else{
               echo "dir exists"
             }
-            7z x $_.fullname
+            7z x $_
             $fflag=(Test-Path '.\ucrtbased.dll')
             if($fflag){
                 Remove-Item '.\ucrtbased.dll'
