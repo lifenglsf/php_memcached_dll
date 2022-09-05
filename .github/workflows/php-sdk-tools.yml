@@ -269,7 +269,7 @@ jobs:
         shell: powershell
         run: |
           
-          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts  -Recurse
+          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts  -Recurse -Filter "*.7z"
           Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts -Filter "*.7z"|Foreach-Object{
             echo "filename:$_.name";
             $oname=$_.name -replace ".7z",""
