@@ -32,6 +32,7 @@ jobs:
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
       - name: set latest version
+        run: |
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/epos/php-memcached-dev/php-memcached/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name"
             echo "memcached latest version:$tag"
