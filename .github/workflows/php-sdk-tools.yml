@@ -48,7 +48,7 @@ jobs:
             echo "igbinary latest version:$tag"
             
             $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
-            $response|get-member -membertype Properties
+            $response|get-member -membertype NoteProperty
             $tag=$response|select-object -first 5
             $type=$tag.gettype()
 
