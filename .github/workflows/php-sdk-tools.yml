@@ -33,15 +33,15 @@ jobs:
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
       - name: set latest version
         run: |
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/epos/php-memcached-dev/php-memcached/releases/latest"
+            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name"
             echo "memcached latest version:$tag"
             
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/epos/msgpack/msgpack-php/releases/latest"
+            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name"
             echo "msgpack latest version:$tag"
             
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/epos/igbinary/igbinary/releases/latest"
+            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name"
             echo "igbinary latest version:$tag"
             exit
