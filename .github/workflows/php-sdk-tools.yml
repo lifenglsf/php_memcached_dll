@@ -35,12 +35,12 @@ jobs:
         run: |
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name"
-            $tag=$tag -replace "v" ""
+            $tag=$tag -replace "v",""
             echo "memcached latest version:$tag"
             
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name" 
-            $tag=$tag -replace "msgpack-" ""
+            $tag=$tag -replace "msgpack-",""
             echo "msgpack latest version:$tag"
             
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
