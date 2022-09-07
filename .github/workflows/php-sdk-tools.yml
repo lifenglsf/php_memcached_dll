@@ -34,16 +34,21 @@ jobs:
       - name: set latest version
         run: |
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name"
+            $tag=$response|select-object -ExpandProperty "tag_name" -replace "v"
             echo "memcached latest version:$tag"
             
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name"
+            $tag=$response|select-object -ExpandProperty "tag_name" -replace "msgpack-"
             echo "msgpack latest version:$tag"
             
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name"
+            $tag=$response|select-object -ExpandProperty "tag_name" 
             echo "igbinary latest version:$tag"
+            
+            $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
+            $tag=$response.keys 
+            echo "phpversion latest version:$tag"
+            
             exit
 
       - name: Setup the Artifact API environment
