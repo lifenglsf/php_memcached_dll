@@ -49,10 +49,10 @@ jobs:
             
             $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
             $response|get-member -membertype Properties
-            $tag=$response|select-object -ExpandProperty *
+            $tag=$response|select-object -Property *
+            $type=$tag.gettype
 
-
-            echo "phpversion latest version:$tag"
+            echo "phpversion latest version:$tag,type:$type"
             
             exit
 
