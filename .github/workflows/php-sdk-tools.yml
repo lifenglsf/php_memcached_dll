@@ -26,7 +26,7 @@ jobs:
           }
           $j=$tt|convertto-json
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$j"
-          echo "::set-output name=matrix-version::$tt"
+          echo "::set-output name=matrix-version::$tt|jq -s -c"
 
           $type=$tag.gettype()
           
