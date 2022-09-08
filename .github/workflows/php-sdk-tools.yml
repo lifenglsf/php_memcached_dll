@@ -39,6 +39,10 @@ jobs:
       run:
         shell: powershell
     runs-on: windows-2019
+    outputs:
+      Ig: $env.Ig
+      Mg: $env.Mg
+      Pg: $env.Pg
     strategy:
       matrix:
           version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
@@ -74,165 +78,185 @@ jobs:
             echo "Ig=$tag" >> $env:GITHUB_ENV
             
 
-      - name: Setup the Artifact API environment
-        uses: actions/github-script@v6
-        with:
-          script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
-      - name: show env
-        run: |
-          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
-          $header=@{
-          "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
-          }
-          $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
-          $response|get-member
-          $counts = $response|select-object -ExpandProperty "count"
-          echo "counts:$counts"
-          echo "response =$response"
-          $content = $response.content
-          $rc=$response.rawContent
-          echo "$content,$rc"
-          $json = ConvertTo-Json  $response
-          
-          $count = $json.count
-          $value=$json.value
-          echo "count value $count,value $value"
-      - name: Setup PHP
-        id: setup-php
-        uses: cmb69/setup-php-sdk@v0.6
-        with:
-          version: ${{matrix.version}}
-          arch: ${{matrix.arch}}
-          ts: ${{matrix.ts}}
-          deps: zlib,zip,libxml,libiconv,libjpeg,edit,libssl,libzip
-      - name: Enable Developer Command Prompt
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: ${{matrix.arch}}
-          toolset: ${{steps.setup-php.outputs.toolset}}
-      - name : show deps
-        shell: cmd
-        run: |
-          
-          dir /N /S ..\deps
-          
-      - name: get php source and deps
-        run: |
-          php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
-          phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
-          echo "copy cmdb deps to phpsource deps"
-          xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
-          echo "get latest php version"
-          curl   https://windows.php.net/downloads/releases/releases.json -o r.json
-          $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
-          $version = $CLRJson."${{matrix.version}}".version 
-          rm r.json
-          cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
-          echo "get latest php source code"
-          curl  https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
-          if("${{matrix.version}}" -eq "7.4"){
-                    $tmp_path="php-"+$version+"-src"
-                    echo "tmp_path:$tmp_path"
-                    mkdir $tmp_path
-                    7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -otmp_php
-                    Get-ChildItem -Path tmp_php\* -Recurse | Move-Item -Destination $tmp_path
-                    Get-ChildItem -Path $tmp_path
+#      - name: Setup the Artifact API environment
+#        uses: actions/github-script@v6
+#        with:
+#          script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
+#      - name: show env
+#        run: |
+#          echo "action runtime url=${{env.ACTIONS_RUNTIME_URL}}"
+#          $header=@{
+#          "Authorization"="Bearer ${{env.ACTIONS_RUNTIME_TOKEN}}" 
+#          }
+#          $response = Invoke-RestMethod -Method Get -Uri  "${{env.ACTIONS_RUNTIME_URL}}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview" -Headers $header
+#          $response|get-member
+#          $counts = $response|select-object -ExpandProperty "count"
+#          echo "counts:$counts"
+#          echo "response =$response"
+#          $content = $response.content
+#          $rc=$response.rawContent
+#          echo "$content,$rc"
+#          $json = ConvertTo-Json  $response
+#          
+#          $count = $json.count
+#          $value=$json.value
+#          echo "count value $count,value $value"
+#      - name: Setup PHP
+#        id: setup-php
+#        uses: cmb69/setup-php-sdk@v0.6
+#        with:
+#          version: ${{matrix.version}}
+#          arch: ${{matrix.arch}}
+#          ts: ${{matrix.ts}}
+#          deps: zlib,zip,libxml,libiconv,libjpeg,edit,libssl,libzip
+#      - name: Enable Developer Command Prompt
+#        uses: ilammy/msvc-dev-cmd@v1
+#        with:
+#          arch: ${{matrix.arch}}
+#          toolset: ${{steps.setup-php.outputs.toolset}}
+#      - name : show deps
+#        shell: cmd
+#        run: |
+#          
+#          dir /N /S ..\deps
+#          
+#      - name: get php source and deps
+#        run: |
+#          php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
+#          phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
+#          echo "copy cmdb deps to phpsource deps"
+#          xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
+#          echo "get latest php version"
+#          curl   https://windows.php.net/downloads/releases/releases.json -o r.json
+#          $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
+#          $version = $CLRJson."${{matrix.version}}".version 
+#          rm r.json
+#          cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
+#          echo "get latest php source code"
+#          curl  https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
+#          if("${{matrix.version}}" -eq "7.4"){
+#                    $tmp_path="php-"+$version+"-src"
+#                    echo "tmp_path:$tmp_path"
+#                    mkdir $tmp_path
+#                    7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -otmp_php
+#                    Get-ChildItem -Path tmp_php\* -Recurse | Move-Item -Destination $tmp_path
+#                    Get-ChildItem -Path $tmp_path
+#
+#          }else{
+#                    7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip #
 
-          }else{
-                    7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip 
+#          }
+#          Get-ChildItem -Path .
+#          rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
+#          cd php-$version-src
+#          echo "get memcached dependency"
+#          curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
+#          7z x ${{matrix.arch}}.zip -odeps
+#          xcopy /S /E /Y deps ..\deps
+#          rm ${{matrix.arch}}.zip
+#          dir
+#          remove-item .\deps -Recurse
+#          echo "get memcached ext source code"
+#          curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
+#          7z x m.zip 
+#          xcopy /S /E /Y php-memcached-windows_msgpack_support ..\deps\include
+#          md .\ext\memcached
+#          xcopy /S /E /Y php-memcached-windows_msgpack_support ext\memcached
+#          rm m.zip
+#          remove-item .\php-memcached-windows_msgpack_support -Recurse
+#          if("${{matrix.ext}}" -eq "basic"){
+#            .\buildconf.bat
+#            if("${{matrix.ts}}" -eq "nts"){
+#            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --disable-zts
+#            }else{
+#            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
+#            }
+#            
+#          }
+#          if("${{matrix.ext}}" -eq "msgpack"){
+#           curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+#           7z x msgpack.zip 
+#           xcopy /S /E /Y msgpack-php-master ..\deps\include
+#           md .\ext\msgpack
+#           xcopy /S /E /Y msgpack-php-master .\ext\msgpack
+#           remove-item .\msgpack-php-master -Recurse
 
-          }
-          Get-ChildItem -Path .
-          rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
-          cd php-$version-src
-          echo "get memcached dependency"
-          curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
-          7z x ${{matrix.arch}}.zip -odeps
-          xcopy /S /E /Y deps ..\deps
-          rm ${{matrix.arch}}.zip
-          dir
-          remove-item .\deps -Recurse
-          echo "get memcached ext source code"
-          curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
-          7z x m.zip 
-          xcopy /S /E /Y php-memcached-windows_msgpack_support ..\deps\include
-          md .\ext\memcached
-          xcopy /S /E /Y php-memcached-windows_msgpack_support ext\memcached
-          rm m.zip
-          remove-item .\php-memcached-windows_msgpack_support -Recurse
-          if("${{matrix.ext}}" -eq "basic"){
-            .\buildconf.bat
-            if("${{matrix.ts}}" -eq "nts"){
-            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --disable-zts
-            }else{
-            .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
-            }
-            
-          }
-          if("${{matrix.ext}}" -eq "msgpack"){
-           curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
-           7z x msgpack.zip 
-           xcopy /S /E /Y msgpack-php-master ..\deps\include
-           md .\ext\msgpack
-           xcopy /S /E /Y msgpack-php-master .\ext\msgpack
-           remove-item .\msgpack-php-master -Recurse
-
-           .\buildconf.bat
-           if("${{matrix.ts}}" -eq "nts"){
-                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --disable-zts
-
-           }else{
-              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
-           }
-          }
-          if("${{matrix.ext}}" -eq "igbinary"){
-           curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
-           7z x igbinary.zip
-           xcopy /S /E /Y igbinary-master ..\deps\include
-           md .\ext\igbinary
-           xcopy /S /E /Y igbinary-master .\ext\igbinary
-           remove-item .\igbinary-master -Recurse
-           .\buildconf.bat
-           if("${{matrix.ts}}" -eq "nts"){
-              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps --disable-zts
-
-           }else{
-               .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
-          }
-          }
-          dir ext\memcached
-          nmake
-          mkdir -p ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
-          copy ..\deps\bin\libmemcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
-          if('${{matrix.arch}}' -eq 'x86'){
-            if('${{matrix.ts}}' -eq 'nts'){
-              copy Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
-            }else{
-              copy Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
-            }
-          }else{
-            if('${{matrix.ts}}' -eq 'nts'){
-              copy x64\Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
-            }else{
-              copy x64\Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
-            }
-          }
-          dir
-          7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
-      - name: Accidentally upload to the same artifact via multiple jobs
-        uses: actions/upload-artifact@v3
-        with:
-            name: ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
-            path: ${{ github.workspace }}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
-     
+#           .\buildconf.bat
+#           if("${{matrix.ts}}" -eq "nts"){
+#                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --disable-zts
+#
+#           }else{
+#              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
+#           }
+#          }
+#          if("${{matrix.ext}}" -eq "igbinary"){
+#           curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
+#           7z x igbinary.zip
+#           xcopy /S /E /Y igbinary-master ..\deps\include
+#           md .\ext\igbinary
+#           xcopy /S /E /Y igbinary-master .\ext\igbinary
+#           remove-item .\igbinary-master -Recurse
+#           .\buildconf.bat
+#           if("${{matrix.ts}}" -eq "nts"){
+#              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps --disable-zts
+#
+#          }else{
+#               .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
+#          }
+#          }
+#          dir ext\memcached
+#          nmake
+#          mkdir -p ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+#          copy ..\deps\bin\libmemcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+#          if('${{matrix.arch}}' -eq 'x86'){
+#            if('${{matrix.ts}}' -eq 'nts'){
+#              copy Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+#            }else{
+#              copy Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+#            }
+#          }else{
+#            if('${{matrix.ts}}' -eq 'nts'){
+#              copy x64\Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+#            }else{
+#              copy x64\Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+#            }
+#          }
+#          dir
+#          7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
+#      - name: Accidentally upload to the same artifact via multiple jobs
+#        uses: actions/upload-artifact@v3
+#        with:
+#            name: ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+#            path: ${{ github.workspace }}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
+#     
   create_release:
     needs: [ts74-x64-msgpack]
     defaults:
       run:
         shell: cmd
     runs-on: windows-2019
+    env:
+      Ig: ${{needs.ts74-x64-msgpack.Ig}}
+      Pg: ${{needs.ts74-x64-msgpack.Pg}}
+      Mg: ${{needs.ts74-x64-msgpack.Mg}}
     steps: 
       - uses: actions/checkout@v3
+      - name: set latest version
+        run: |
+            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
+            $tag=$response|select-object -ExpandProperty "tag_name"
+            $tag=$tag -replace "v",""
+            echo "memcached latest version:$tag"
+            echo "Pg=$tag" >> $env:GITHUB_ENV
+            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
+            $tag=$response|select-object -ExpandProperty "tag_name" 
+            $tag=$tag -replace "msgpack-",""
+            echo "msgpack latest version:$tag"
+            echo "Mg=$tag" >> $env:GITHUB_ENV
+            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
+            $tag=$response|select-object -ExpandProperty "tag_name" 
+            echo "igbinary latest version:$tag"
+            echo "Ig=$tag" >> $env:GITHUB_ENV
       - name: Setup the Artifact API environment
         uses: actions/github-script@v6
         with:
