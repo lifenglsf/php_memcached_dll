@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        include: ${{needs.job1.outputs.matrix}}
+        include: ${{ fromjson(needs.job1.outputs.matrix)}}
     steps:
     - run: echo hello
   setup_matrix:
