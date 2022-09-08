@@ -54,6 +54,10 @@ jobs:
       
   ts74-x64-msgpack:
     needs: ["setup_matrix"]
+    env: 
+      Ig:  ${{needs.setup_matrix.outputs.Ig}}
+      Pg:  ${{needs.setup_matrix.outputs.Pg}}
+      Mg:  ${{needs.setup_matrix.outputs.Mg}}
     defaults:
       run:
         shell: powershell
