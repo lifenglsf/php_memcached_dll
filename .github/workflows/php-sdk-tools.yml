@@ -5,9 +5,6 @@ on:
       - .github/workflows/php-sdk-tools.yml
 env: 
     Ver: windows_msgpack_support
-    Mg: 2.2.0RC1
-    Ig: 3.2.7
-    Pg: 3.2.0
 jobs:
   ts74-x64-msgpack:
     defaults:
@@ -37,19 +34,19 @@ jobs:
             $tag=$response|select-object -ExpandProperty "tag_name"
             $tag=$tag -replace "v",""
             echo "memcached latest version:$tag"
-            
+            echo "Pg=$tag" >> $env:GITHUB_ENV
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name" 
             $tag=$tag -replace "msgpack-",""
             echo "msgpack latest version:$tag"
-            
+            echo "Mg=$tag" >> $env:GITHUB_ENV
             $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
             $tag=$response|select-object -ExpandProperty "tag_name" 
             echo "igbinary latest version:$tag"
-            
+            echo "Ig=$tag" >> $env:GITHUB_ENV
             $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
             $response|get-member -membertype NoteProperty
-            $tag=$response|select-object -first 5
+            $tag=($response|get-member)[-1]
             $type=$tag.gettype()
 
             echo "phpversion latest version:$tag,type:$type"
