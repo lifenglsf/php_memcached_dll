@@ -6,21 +6,6 @@ on:
 env: 
     Ver: windows_msgpack_support
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-    - id: set-matrix
-      run: echo "::set-output name=matrix::[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]"
-  job2:
-    needs: job1
-    runs-on: ubuntu-latest
-    strategy:
-      matrix: 
-        include: ${{ fromjson(needs.job1.outputs.matrix)}}
-    steps:
-    - run: echo hello
   setup_matrix:
     defaults:
       run:
@@ -50,7 +35,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ["7.4","8.0","8.1"]
+          version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
           arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
