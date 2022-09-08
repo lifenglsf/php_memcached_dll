@@ -26,7 +26,7 @@ jobs:
           }
           $j=$tt|convertto-json
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$j"
-          echo "::set-output name=matrix-version::$j"
+          echo "::set-output name=matrix-version::$tt"
 
           $type=$tag.gettype()
           
@@ -40,7 +40,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-          version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
+          version: ${{ needs.setup_matrix.outputs.matrix-version}}
           arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
