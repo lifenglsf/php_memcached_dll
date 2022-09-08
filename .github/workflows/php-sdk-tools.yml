@@ -13,6 +13,9 @@ jobs:
     runs-on: windows-2019
     outputs: 
       matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
+      Ig: ${{steps.setup_matrix.outputs.Ig}}
+      Mg: ${{steps.setup_matrix.outputs.Mg}}
+      Pg: ${{steps.setup_matrix.outputs.Pg}}
     steps:
       - name: setup matrix
         id: setup_matrix
@@ -28,7 +31,23 @@ jobs:
           $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
           echo "::set-output name=matrix-version::$v"
-
+          $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
+          $tag=$response|select-object -ExpandProperty "tag_name"
+          $tag=$tag -replace "v",""
+          echo "::set-output name=Pg::$tag"
+          echo "memcached latest version:$tag"
+          echo "Pg=$tag" >> $env:GITHUB_ENV
+          $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
+          $tag=$response|select-object -ExpandProperty "tag_name" 
+          $tag=$tag -replace "msgpack-",""
+          echo "msgpack latest version:$tag"
+          echo "::set-output name=Mg::$tag"
+          echo "Mg=$tag" >> $env:GITHUB_ENV
+          $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
+          $tag=$response|select-object -ExpandProperty "tag_name" 
+          echo "igbinary latest version:$tag"
+          echo "Ig=$tag" >> $env:GITHUB_ENV
+          echo "::set-output name=Ig::$tag"
           $type=$tag.gettype()
           
             
@@ -40,9 +59,9 @@ jobs:
         shell: powershell
     runs-on: windows-2019
     outputs:
-      Ig: $env.Ig
-      Mg: $env.Mg
-      Pg: $env.Pg
+      Ig: ${{needs.setup_matrix.outputs.Ig}}
+      Mg: ${{needs.setup_matrix.outputs.Mg}}
+      Pg: ${{needs.setup_matrix.outputs.Pg}}
     strategy:
       matrix:
           version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
@@ -60,22 +79,23 @@ jobs:
          env
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
-      - name: set latest version
-        run: |
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name"
-            $tag=$tag -replace "v",""
-            echo "memcached latest version:$tag"
-            echo "Pg=$tag" >> $env:GITHUB_ENV
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name" 
-            $tag=$tag -replace "msgpack-",""
-            echo "msgpack latest version:$tag"
-            echo "Mg=$tag" >> $env:GITHUB_ENV
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name" 
-            echo "igbinary latest version:$tag"
-            echo "Ig=$tag" >> $env:GITHUB_ENV
+#      - name: set latest version
+#        id: ts74-x64-msgpack
+#        run: |
+#            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
+#            $tag=$response|select-object -ExpandProperty "tag_name"
+#            $tag=$tag -replace "v",""
+#            echo "memcached latest version:$tag"
+#            echo "Pg=$tag" >> $env:GITHUB_ENV
+#            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
+#            $tag=$response|select-object -ExpandProperty "tag_name" 
+#            $tag=$tag -replace "msgpack-",""
+#            echo "msgpack latest version:$tag"
+#            echo "Mg=$tag" >> $env:GITHUB_ENV
+#            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
+#            $tag=$response|select-object -ExpandProperty "tag_name" 
+#            echo "igbinary latest version:$tag"
+#            echo "Ig=$tag" >> $env:GITHUB_ENV
             
 
 #      - name: Setup the Artifact API environment
@@ -236,27 +256,11 @@ jobs:
         shell: cmd
     runs-on: windows-2019
     env:
-      Ig: ${{needs.ts74-x64-msgpack.Ig}}
-      Pg: ${{needs.ts74-x64-msgpack.Pg}}
-      Mg: ${{needs.ts74-x64-msgpack.Mg}}
+      Ig: ${{needs.ts74-x64-msgpack.outputs.Ig}}
+      Pg: ${{needs.ts74-x64-msgpack.outputs.Pg}}
+      Mg: ${{needs.ts74-x64-msgpack.outputs.Mg}}
     steps: 
       - uses: actions/checkout@v3
-      - name: set latest version
-        run: |
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name"
-            $tag=$tag -replace "v",""
-            echo "memcached latest version:$tag"
-            echo "Pg=$tag" >> $env:GITHUB_ENV
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name" 
-            $tag=$tag -replace "msgpack-",""
-            echo "msgpack latest version:$tag"
-            echo "Mg=$tag" >> $env:GITHUB_ENV
-            $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
-            $tag=$response|select-object -ExpandProperty "tag_name" 
-            echo "igbinary latest version:$tag"
-            echo "Ig=$tag" >> $env:GITHUB_ENV
       - name: Setup the Artifact API environment
         uses: actions/github-script@v6
         with:
