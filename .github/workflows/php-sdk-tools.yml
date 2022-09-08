@@ -259,7 +259,7 @@ jobs:
       Mg: ${{needs.ts74-x64-msgpack.outputs.Mg}}
     steps: 
       - uses: actions/checkout@v3
-      - name: Setup the Artifact API environment
+#      - name: Setup the Artifact API environment
 #        uses: actions/github-script@v6
 #        with:
 #          script: "core.exportVariable(\"ACTIONS_RUNTIME_TOKEN\", process.env[\"ACTIONS_RUNTIME_TOKEN\"])\ncore.exportVariable(\"ACTIONS_RUNTIME_URL\", process.env[\"ACTIONS_RUNTIME_URL\"])\ncore.exportVariable(\"GITHUB_RETENTION_DAYS\", process.env[\"GITHUB_RETENTION_DAYS\"])"
