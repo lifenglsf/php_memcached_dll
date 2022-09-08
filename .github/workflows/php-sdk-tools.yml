@@ -6,7 +6,44 @@ on:
 env: 
     Ver: windows_msgpack_support
 jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - id: set-matrix
+      run: echo "::set-output name=matrix::[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]"
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        include: ${{needs.job1.outputs.matrix}}
+    steps:
+    - run: echo hello
+  setup_matrix:
+    defaults:
+      run:
+        shell: powershell
+    runs-on: windows-2019
+    outputs: 
+      matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
+    steps:
+      - name: setup matrix
+        id: setup_matrix
+        run: |
+          $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
+          $response|get-member -membertype NoteProperty
+          $tag=$response.PSObject.Properties | Select-Object -Expand Name|convertto-json
+          echo "::set-output name=matrix-version::\"include\":$tag"
+          echo "::set-output name=matrix::[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]"
+
+          $type=$tag.gettype()
+          echo "phpversion latest version:$tag,type:$type"
+            
+      
   ts74-x64-msgpack:
+    needs: ["setup_matrix"]
     defaults:
       run:
         shell: powershell
@@ -44,14 +81,7 @@ jobs:
             $tag=$response|select-object -ExpandProperty "tag_name" 
             echo "igbinary latest version:$tag"
             echo "Ig=$tag" >> $env:GITHUB_ENV
-            $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
-            $response|get-member -membertype NoteProperty
-            $tag=$response.PSObject.Properties | Select-Object -Expand Name
-            $type=$tag.gettype()
-
-            echo "phpversion latest version:$tag,type:$type"
             
-            exit
 
       - name: Setup the Artifact API environment
         uses: actions/github-script@v6
