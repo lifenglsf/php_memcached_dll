@@ -19,9 +19,8 @@ jobs:
         run: |
           $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
           $response|get-member -membertype NoteProperty
-          $tag=$response.PSObject.Properties | Select-Object -Expand Name|convertto-json
+          $tag=$response.PSObject.Properties | Select-Object -Expand Name
           echo "::set-output name=matrix-version::\"include\":$tag"
-          echo "::set-output name=matrix::[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]"
 
           $type=$tag.gettype()
           echo "phpversion latest version:$tag,type:$type"
