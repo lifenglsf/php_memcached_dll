@@ -21,7 +21,7 @@ jobs:
           $response|get-member -membertype NoteProperty
           $tag=$response.PSObject.Properties | Select-Object -Expand Name
           $tt=@()
-          foreach(t in $tag){
+          foreach($t in $tag){
             $tt+="$t"
           }
           $j=$tt|convertto-json
