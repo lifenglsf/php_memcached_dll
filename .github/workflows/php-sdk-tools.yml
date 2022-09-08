@@ -20,10 +20,16 @@ jobs:
           $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
           $response|get-member -membertype NoteProperty
           $tag=$response.PSObject.Properties | Select-Object -Expand Name
-          echo "::set-output name=matrix-version::\"include\":$tag"
+          $tt=@()
+          foreach(t in $tag){
+            $tt+="$t"
+          }
+          $j=$tt|convertto-json
+          echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$j"
+          echo "::set-output name=matrix-version::\"include\":$j"
 
           $type=$tag.gettype()
-          echo "phpversion latest version:$tag,type:$type"
+          
             
       
   ts74-x64-msgpack:
