@@ -1,5 +1,7 @@
 name: Build and Test on Windows
 on: 
+  schedule:
+    - cron: '0 18 * * *'
   push: 
     paths: 
       - .github/workflows/php-sdk-tools.yml
@@ -386,7 +388,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{env.Pg}}-auto
-          prerelease: true
 #      - name: nmake
 #        run: |
 #          nmake
