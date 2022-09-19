@@ -125,7 +125,7 @@ jobs:
 #          $json = ConvertTo-Json  $response
 #          
 #          $count = $json.count
-#          $value=$json.value
+#1          $value=$json.value
 #          echo "count value $count,value $value"
       - name: Setup PHP
         id: setup-php
