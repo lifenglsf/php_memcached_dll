@@ -81,11 +81,12 @@ ucrtbased.dll missing copy ucrtbased to system32 or SysWOW64
 
 TodList
 - [x] Automatically compile the base version
-- [ ] Automatically compile msgpack based versions
-- [ ] Automatically compile igbinary based versions
+- [x] Automatically compile msgpack based versions
+- [x] Automatically compile igbinary based versions
 - [ ] Automatically get latest php-memcached version
-- [ ] Automatically get latest msgpack version
-- [ ] Automatically get latest igbinary version
+- [x] Automatically get latest msgpack version
+- [x] Automatically get latest igbinary version
+- [] Support libmemcached-awesome 
 
 
 
