@@ -52,6 +52,16 @@
     |igbinary support|yes|
     |json support|yes|
     |msgpack support|yes|
+    
+    **auto-xxx**
+     
+    |name|is_support|
+    ----|----------
+    |SASL support|no|
+    |Session support|yes|
+    |igbinary support|yes|
+    |json support|yes|
+    |msgpack support|yes|
 
 
 version>=3.15 
@@ -68,10 +78,12 @@ version>=3.15
     support session and json and msgpack
     
     must download msgpack.dll and configure it to php.ini
-    
+ 
     	
 Tips:
 ucrtbased.dll missing copy ucrtbased to system32 or SysWOW64
+
+## github workflows create directories like auto-3.2.0
 ## recommend use x64. x86 may be could not worked correctly before pre-3.2.0.
 ## The pre-release is not a stable version, it is automatically compiled based on the latest php-memcached
     
