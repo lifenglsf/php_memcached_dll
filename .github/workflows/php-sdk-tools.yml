@@ -48,7 +48,7 @@ jobs:
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           echo "igbinary latest version:$tag"
-          echo "Ig=$tag" >> $GITHUB_OUTPUT
+          echo "Ig=111" >> $GITHUB_OUTPUT
           echo "Ig=$tag"
           $type=$tag.gettype()
     
@@ -58,7 +58,7 @@ jobs:
             
       
   ts74-x64-msgpack:
-    # needs: ["setup_matrix"]
+    needs: ["setup_matrix"]
     # env: 
     #  Ig:  ${{needs.setup_matrix.outputs.Ig}}
     #  Pg:  ${{needs.setup_matrix.outputs.Pg}}
