@@ -51,7 +51,10 @@ jobs:
           echo "Ig=$tag" >> $GITHUB_OUTPUT
           echo "Ig=$tag"
           $type=$tag.gettype()
-          
+    
+      - name: test
+        run: |
+          echo "ig is ${{steps.setup_matrix.outputs.Ig}},mg is ${{steps.setup_matrix.outputs.Mg}}"
             
       
   ts74-x64-msgpack:
