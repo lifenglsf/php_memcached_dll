@@ -13,11 +13,11 @@ jobs:
       run:
         shell: powershell
     runs-on: windows-2019
-    outputs: 
-      matrix-version: ${{steps.setup_matrix.matrix-version}}
-      Ig: ${{steps.setup_matrix.Ig}}
-      Mg: ${{steps.setup_matrix.Mg}}
-      Pg: ${{steps.setup_matrix.Pg}}
+   # outputs: 
+   #   matrix-version: ${{steps.setup_matrix.matrix-version}}
+   #   Ig: ${{steps.setup_matrix.Ig}}
+   #   Mg: ${{steps.setup_matrix.Mg}}
+    #  Pg: ${{steps.setup_matrix.Pg}}
     steps:
       - name: setup matrix
         id: setup_matrix
@@ -38,17 +38,17 @@ jobs:
           $tag=$tag -replace "v",""
           echo "Pg=$tag"
           echo "memcached latest version:$tag"
-          echo "Pg=$tag" >> $GITHUB_ENV
+          echo "Pg=$tag" >> $GITHUB_OUTPUT
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           $tag=$tag -replace "msgpack-",""
           echo "msgpack latest version:$tag"
           echo "Mg=$tag"
-          echo "Mg=$tag" >> $GITHUB_ENV
+          echo "Mg=$tag" >> $GITHUB_OUTPUT
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           echo "igbinary latest version:$tag"
-          echo "Ig=$tag" >> $GITHUB_ENV
+          echo "Ig=$tag" >> $GITHUB_OUTPUT
           echo "Ig=$tag"
           $type=$tag.gettype()
           
