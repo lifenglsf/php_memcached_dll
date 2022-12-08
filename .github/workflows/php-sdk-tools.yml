@@ -32,24 +32,24 @@ jobs:
           $j=$tt|convertto-json
           $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
-          echo "{name}={matrix-version::$v}"
+          echo "{matrix-version}={$v}"
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name"
           $tag=$tag -replace "v",""
-          echo "{name}={Pg::$tag}"
+          echo "{Pg}={$tag}"
           echo "memcached latest version:$tag"
           echo "Pg=$tag" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           $tag=$tag -replace "msgpack-",""
           echo "msgpack latest version:$tag"
-          echo "{name}={Mg::$tag}"
+          echo "{Mg}={$tag}"
           echo "Mg=$tag" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           echo "igbinary latest version:$tag"
           echo "Ig=$tag" >> $env:GITHUB_ENV
-          echo "{name}={Ig::$tag}"
+          echo "{Ig}={$tag}"
           $type=$tag.gettype()
           
             
