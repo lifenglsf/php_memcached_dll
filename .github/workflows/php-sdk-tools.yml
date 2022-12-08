@@ -32,7 +32,7 @@ jobs:
           $j=$tt|convertto-json
           $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
-          echo "matrix-version=$v"
+          echo "matrix-version=$v" >>$GITHUB_OUTPUT
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name"
           $tag=$tag -replace "v",""
