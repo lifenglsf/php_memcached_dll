@@ -84,6 +84,7 @@ jobs:
         if: matrix.version!='7.4'
         run: |
          env
+         echo ${{steps.setup_matrix.outputs.matrix-version}}
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
 #      - name: set latest version
