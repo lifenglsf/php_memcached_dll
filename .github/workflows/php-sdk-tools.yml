@@ -19,6 +19,11 @@ jobs:
       Mg: ${{steps.setup_matrix.Mg}}
       Pg: ${{steps.setup_matrix.Pg}}
     steps:
+      - name: Set color
+        id: random-color-generator
+        run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
+      - name: Get color
+        run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
       - name: setup matrix
         id: setup_matrix
         run: |
