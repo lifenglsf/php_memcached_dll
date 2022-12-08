@@ -33,7 +33,7 @@ jobs:
           $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
           echo "matrix-version=$v" >>$GITHUB_OUTPUT
-          echo "aaa=bbb" >>$env::GITHUB_ENV
+          echo "aaa=vc15" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name"
           $tag=$tag -replace "v",""
