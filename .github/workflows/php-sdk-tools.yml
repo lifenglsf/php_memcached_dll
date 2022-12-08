@@ -55,7 +55,7 @@ jobs:
     
       - name: test
         run: |
-          env
+          echo "env aaa is ${{env.aaa}}"
           echo "ig is ${{ steps.setup_matrix.outputs.IG }},mg is ${{ steps.setup_matrix.outputs.MG }}"
             
       
