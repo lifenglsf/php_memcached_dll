@@ -14,10 +14,10 @@ jobs:
         shell: powershell
     runs-on: windows-2019
     outputs: 
-      matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
-      Ig: ${{steps.setup_matrix.outputs.Ig}}
-      Mg: ${{steps.setup_matrix.outputs.Mg}}
-      Pg: ${{steps.setup_matrix.outputs.Pg}}
+      matrix-version: ${{steps.setup_matrix.matrix-version}}
+      Ig: ${{steps.setup_matrix.Ig}}
+      Mg: ${{steps.setup_matrix.Mg}}
+      Pg: ${{steps.setup_matrix.Pg}}
     steps:
       - name: setup matrix
         id: setup_matrix
