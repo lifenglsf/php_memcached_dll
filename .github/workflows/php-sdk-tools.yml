@@ -14,16 +14,11 @@ jobs:
         shell: powershell
     runs-on: windows-2019
     outputs: 
-      matrix-version: ${{steps.setup_matrix.matrix-version}}
-      Ig: ${{steps.setup_matrix.Ig}}
-      Mg: ${{steps.setup_matrix.Mg}}
-      Pg: ${{steps.setup_matrix.Pg}}
+      matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
+      Ig: ${{steps.setup_matrix.outputs.Ig}}
+      Mg: ${{steps.setup_matrix.outputs.Mg}}
+      Pg: ${{steps.setup_matrix.outputs.Pg}}
     steps:
-      - name: Set color
-        id: random-color-generator
-        run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
-      - name: Get color
-        run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
       - name: setup matrix
         id: setup_matrix
         run: |
@@ -37,50 +32,45 @@ jobs:
           $j=$tt|convertto-json
           $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
-          echo "matrix-version=$v" >>$GITHUB_OUTPUT
-          echo "aaa=vc15" >> $env:GITHUB_ENV
+          echo "::set-output name=matrix-version::$v"
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name"
           $tag=$tag -replace "v",""
-          echo "Pg=$tag"
+          echo "::set-output name=Pg::$tag"
           echo "memcached latest version:$tag"
-          echo "Pg=$tag" >> $GITHUB_OUTPUT
+          echo "Pg=$tag" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           $tag=$tag -replace "msgpack-",""
           echo "msgpack latest version:$tag"
-          echo "Mg=$tag"
-          echo "Mg=$tag" >> $GITHUB_OUTPUT
+          echo "::set-output name=Mg::$tag"
+          echo "Mg=$tag" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           echo "igbinary latest version:$tag"
-          echo "IG=111" >> $GITHUB_OUTPUT
-          echo "Ig=$tag"
+          echo "Ig=$tag" >> $env:GITHUB_ENV
+          echo "::set-output name=Ig::$tag"
           $type=$tag.gettype()
-    
-      - name: test
-        run: |
-          echo "env aaa is ${{env.aaa}}"
-          echo "ig is ${{ steps.setup_matrix.outputs.IG }},mg is ${{ steps.setup_matrix.outputs.MG }}"
+          
             
       
   ts74-x64-msgpack:
     needs: ["setup_matrix"]
-    # env: 
-    #  Ig:  ${{needs.setup_matrix.outputs.Ig}}
-    #  Pg:  ${{needs.setup_matrix.outputs.Pg}}
-    #  Mg:  ${{needs.setup_matrix.outputs.Mg}}
+    env: 
+      Ig:  ${{needs.setup_matrix.outputs.Ig}}
+      Pg:  ${{needs.setup_matrix.outputs.Pg}}
+      Mg:  ${{needs.setup_matrix.outputs.Mg}}
     defaults:
       run:
         shell: powershell
     runs-on: windows-2019
-    # outputs:
-     # Ig: ${{needs.setup_matrix.outputs.Ig}}
-     # Mg: ${{needs.setup_matrix.outputs.Mg}}
-     # Pg: ${{needs.setup_matrix.outputs.Pg}}
+    outputs:
+      Ig: ${{needs.setup_matrix.outputs.Ig}}
+      Mg: ${{needs.setup_matrix.outputs.Mg}}
+      Pg: ${{needs.setup_matrix.outputs.Pg}}
     strategy:
       matrix:
-          # version: ${{ fromjson(steps.setup_matrix.outputs.matrix-version)}}
+          version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
           arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
@@ -88,13 +78,11 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
-          echo ${{steps.setup_matrix.outputs.matrix-version}}
           echo "Vs=vc15" >> $env:GITHUB_ENV
       - name: vs16
         if: matrix.version!='7.4'
         run: |
          env
-         echo ${{steps.setup_matrix.outputs.matrix-version}}
          echo "Vs=vs16" >> $env:GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
 #      - name: set latest version
