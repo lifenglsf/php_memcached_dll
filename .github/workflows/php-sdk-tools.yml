@@ -182,7 +182,7 @@ jobs:
           dir
           remove-item .\deps -Recurse
           echo "get memcached ext source code"
-          curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/windows_msgpack_support.zip -o m.zip
+          curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/v${{env.Pg}}.zip -o m.zip
           7z x m.zip 
           xcopy /S /E /Y php-memcached-windows_msgpack_support ..\deps\include
           md .\ext\memcached
