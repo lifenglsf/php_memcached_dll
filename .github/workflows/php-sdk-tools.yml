@@ -187,7 +187,7 @@ jobs:
             dir
             remove-item .\deps -Recurse
             echo "get memcached ext source code"
-            curl  https://github.com/php-memcached-dev/php-memcached/archive/refs/heads/v${{env.Pg}}.zip -o m.zip
+            curl  https://github.com/php-memcached-dev/php-memcached/archive/refs/tags/v${{env.Pg}}.zip -o m.zip
             7z x m.zip 
             xcopy /S /E /Y php-memcached-windows_msgpack_support ..\deps\include
             md .\ext\memcached
@@ -203,7 +203,7 @@ jobs:
               }
             }
             if("${{matrix.ext}}" -eq "msgpack"){
-             curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+             curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/tags/msgpack-${{env.Mg}}.zip -o msgpack.zip
              7z x msgpack.zip 
              xcopy /S /E /Y msgpack-php-master ..\deps\include
              md .\ext\msgpack
@@ -217,7 +217,7 @@ jobs:
              }
             }
             if("${{matrix.ext}}" -eq "igbinary"){
-             curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
+             curl   https://github.com/igbinary/igbinary/archive/refs/tags/${{env.Ig}}.zip -o igbinary.zip
              7z x igbinary.zip
              xcopy /S /E /Y igbinary-master ..\deps\include
              md .\ext\igbinary
