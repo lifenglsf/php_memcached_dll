@@ -149,6 +149,10 @@ jobs:
           
       - name: get php source and deps
         run: |
+          if(("${{matrix.version}}" -eq "8.2") -and ("${{env.Pg}}" -eq "3.2.0") ){
+                    echo "3.2.0 不支持php8.2"
+
+          }else{
           php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
           phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
           echo "copy cmdb deps to phpsource deps"
@@ -183,7 +187,7 @@ jobs:
           dir
           remove-item .\deps -Recurse
           echo "get memcached ext source code"
-          curl  https://github.com/lifenglsf/php-memcached/archive/refs/heads/v${{env.Pg}}.zip -o m.zip
+          curl  https://github.com/php-memcached-dev/php-memcached/archive/refs/heads/v${{env.Pg}}.zip -o m.zip
           7z x m.zip 
           xcopy /S /E /Y php-memcached-windows_msgpack_support ..\deps\include
           md .\ext\memcached
@@ -248,6 +252,8 @@ jobs:
           }
           dir
           7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
+          }
+          
       - name: Accidentally upload to the same artifact via multiple jobs
         uses: actions/upload-artifact@v3
         with:
