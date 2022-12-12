@@ -56,18 +56,18 @@ jobs:
       
   ts74-x64-msgpack:
     needs: ["setup_matrix"]
-    env: 
-      Ig:  ${{needs.setup_matrix.outputs.Ig}}
-      Pg:  ${{needs.setup_matrix.outputs.Pg}}
-      Mg:  ${{needs.setup_matrix.outputs.Mg}}
+    #env: 
+    #  Ig:  ${{needs.setup_matrix.outputs.Ig}}
+    #  Pg:  ${{needs.setup_matrix.outputs.Pg}}
+    #  Mg:  ${{needs.setup_matrix.outputs.Mg}}
     defaults:
       run:
         shell: powershell
     runs-on: windows-2019
-    outputs:
-      Ig: ${{needs.setup_matrix.outputs.Ig}}
-      Mg: ${{needs.setup_matrix.outputs.Mg}}
-      Pg: ${{needs.setup_matrix.outputs.Pg}}
+    #outputs:
+    #  Ig: ${{needs.setup_matrix.outputs.Ig}}
+    #  Mg: ${{needs.setup_matrix.outputs.Mg}}
+    #  Pg: ${{needs.setup_matrix.outputs.Pg}}
     strategy:
       matrix:
           version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
@@ -78,6 +78,7 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
+          env
           echo "Vs=vc15" >> $env:GITHUB_ENV
       - name: vs16
         if: matrix.version!='7.4'
