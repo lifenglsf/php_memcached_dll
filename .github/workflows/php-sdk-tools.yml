@@ -70,7 +70,8 @@ jobs:
       Pg: ${{needs.setup_matrix.outputs.Pg}}
     strategy:
       matrix:
-          version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
+          #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
+          version: ["8.0"]
           arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic","igbinary","msgpack"]
@@ -149,9 +150,9 @@ jobs:
           
       - name: get php source and deps
         run: |
-          if(("${{matrix.version}}" -eq "8.2") -and ("${{env.Pg}}" -eq "3.2.0")){
-              echo "3.2.0 不支持php8.2"
-          }else{
+         # if(("${{matrix.version}}" -eq "8.2") -and ("${{env.Pg}}" -eq "3.2.0")){
+         #     echo "3.2.0 不支持php8.2"
+         # }else{
             php-sdk/phpsdk-${{env.Vs}}-${{matrix.arch}}.bat
             phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
             echo "copy cmdb deps to phpsource deps"
@@ -249,7 +250,7 @@ jobs:
             }
             dir
             7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
-          }
+          #}
           
       - name: Accidentally upload to the same artifact via multiple jobs
         uses: actions/upload-artifact@v3
