@@ -96,9 +96,9 @@ TodList
 - [x] Automatically compile msgpack based versions
 - [x] Automatically compile igbinary based versions
 - [ ] Automatically get latest php-memcached version
-- [x] Automatically get latest msgpack version
-- [x] Automatically get latest igbinary version
-- [x] Support libmemcached-awesome 
+- [ ] Automatically get latest msgpack version
+- [ ] Automatically get latest igbinary version
+- [ ] Support libmemcached-awesome 
 
 
 
