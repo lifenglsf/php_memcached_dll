@@ -203,7 +203,7 @@ jobs:
 
             }
             if("${{matrix.ext}}" -eq "msgpack"){
-              curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/tags/msgpack-${{env.Mg}}.zip -o msgpack.zip
+              curl   https://github.com/msgpack/msgpack-php/archive/refs/tags/msgpack-${{env.Mg}}.zip -o msgpack.zip
              7z x msgpack.zip 
              xcopy /S /E /Y msgpack-php-msgpack-${{env.Mg}} ..\deps\include
              md .\ext\msgpack
