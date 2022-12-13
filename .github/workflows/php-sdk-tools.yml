@@ -151,10 +151,82 @@ jobs:
           
       - name: get php source and deps
         run: |
-          if("${{matrix.version}}" -eq "8.2"){
-            echo "aaa"
+          if("${{matrix.version}}" -eq "8.2" -and "${{env.Pg}}" -eq "3.2.0"){
+            echo "3.2.0不支持php8.2"
           }else{
-            echo "bbb"
+            if("${{matrix.version}}" -eq "7.4"){
+                  $tmp_path="php-"+$version+"-src"
+                  echo "tmp_path:$tmp_path"
+                  mkdir $tmp_path
+                  7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -otmp_php
+                  Get-ChildItem -Path tmp_php\* -Recurse | Move-Item -Destination $tmp_path
+                  Get-ChildItem -Path $tmp_path
+            }else{
+                7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip #
+            }
+            Get-ChildItem -Path .
+            rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
+            cd php-$version-src
+            echo "get memcached dependency"
+            curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
+            7z x ${{matrix.arch}}.zip -odeps
+            xcopy /S /E /Y deps ..\deps
+            rm ${{matrix.arch}}.zip
+            dir
+            remove-item .\deps -Recurse
+            if("${{matrix.ext}}" -eq "basic"){
+              .\buildconf.bat
+              if("${{matrix.ts}}" -eq "nts"){
+              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --disable-zts
+              }else{
+              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
+              }
+
+            }
+            if("${{matrix.ext}}" -eq "msgpack"){
+             curl   https://github.com/msgpack/msgpack-php/archive/refs/heads/master.zip -o msgpack.zip
+             7z x msgpack.zip 
+             xcopy /S /E /Y msgpack-php-master ..\deps\include
+             md .\ext\msgpack
+             xcopy /S /E /Y msgpack-php-master .\ext\msgpack
+             remove-item .\msgpack-php-master -Recurse
+             .\buildconf.bat
+             if("${{matrix.ts}}" -eq "nts"){
+                  .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --disable-zts
+
+             }else{
+                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
+             }
+            }
+            if("${{matrix.ext}}" -eq "igbinary"){
+             curl   https://github.com/igbinary/igbinary/archive/refs/heads/master.zip -o igbinary.zip
+             7z x igbinary.zip
+             xcopy /S /E /Y igbinary-master ..\deps\include
+             md .\ext\igbinary
+             xcopy /S /E /Y igbinary-master .\ext\igbinary
+             remove-item .\igbinary-master -Recurse
+             .\buildconf.bat
+             if("${{matrix.ts}}" -eq "nts"){
+                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps --disable-zts
+
+              }else{
+                 .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
+              }
+            }
+            if('${{matrix.arch}}' -eq 'x86'){
+              if('${{matrix.ts}}' -eq 'nts'){
+                copy Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }else{
+                copy Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }
+            }else{
+              if('${{matrix.ts}}' -eq 'nts'){
+                copy x64\Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }else{
+                copy x64\Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }
+            }
+          
           }
           
       - name: Accidentally upload to the same artifact via multiple jobs
