@@ -151,9 +151,9 @@ jobs:
           
       - name: get php source and deps
         run: |
-          if("${{matrix.version}}" -eq "8.2" -and "${{env.Pg}}" -eq "3.2.0"){
-            echo "3.2.0不支持php8.2"
-          }else{
+          #if("${{matrix.version}}" -eq "8.2" -and "${{env.Pg}}" -eq "3.2.0"){
+          #  echo "3.2.0不支持php8.2"
+          #}else{
             echo "copy cmdb deps to phpsource deps"
             xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
             echo "get latest php version"
@@ -249,7 +249,7 @@ jobs:
             dir
             7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
         
-          }
+          #}
           
       - name: Accidentally upload to the same artifact via multiple jobs
         uses: actions/upload-artifact@v3
