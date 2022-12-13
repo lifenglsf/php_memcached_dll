@@ -152,7 +152,7 @@ jobs:
       - name: get php source and deps
         run: |
           if("${{matrix.version}}" -eq "8.2"){
-            echo "320不支持php82"
+            echo "3.2.0不支持php8.2"
           }else{
             echo "bbb"
           }
