@@ -71,7 +71,7 @@ jobs:
     strategy:
       matrix:
           #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
-          version: ["8.2"]
+          version: ["7.4","8.0","8.1"]
           arch: [x64,x86]
           ts: [ts,nts]
           ext: ["basic"]
@@ -154,6 +154,7 @@ jobs:
           #if("${{matrix.version}}" -eq "8.2" -and "${{env.Pg}}" -eq "3.2.0"){
           #  echo "3.2.0不支持php8.2"
           #}else{
+            phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
             echo "copy cmdb deps to phpsource deps"
             xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
             echo "get latest php version"
