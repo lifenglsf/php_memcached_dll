@@ -154,7 +154,7 @@ jobs:
           if("${{matrix.version}}" -eq "8.2"){
               echo "3.2.0 不支持php8.2"
           }else{
-            echo "aaaa"
+            echo "==="
           }
           
       - name: Accidentally upload to the same artifact via multiple jobs
