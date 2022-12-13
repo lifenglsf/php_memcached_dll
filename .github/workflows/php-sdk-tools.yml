@@ -74,8 +74,8 @@ jobs:
           version: ["7.4","8.0","8.1"]
           arch: [x64,x86]
           ts: [ts,nts]
-          ext: ["basic"]
-          #ext: ["basic","igbinary","msgpack"]
+          #ext: ["basic"]
+          ext: ["basic","igbinary","msgpack"]
     steps:
       - name: vc15
         if: matrix.version=='7.4'
