@@ -383,7 +383,7 @@ jobs:
           git add auto-${{env.Pg}}* && git commit --allow-empty -m "${{env.Pg}} automatic compilation" && git push origin master
           
       - name: delete_tag
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        uses: dev-drprasad/delete-tag-and-release@v0.2.1
         with:
          delete_release: true # default: false
          tag_name: v${{env.Pg}}-auto # tag name to delete
