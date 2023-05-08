@@ -377,7 +377,6 @@ jobs:
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git pull
           git add auto-${{env.Pg}}* && git commit --allow-empty -m "${{env.Pg}} automatic compilation" && git push origin master
           
       - name: delete_tag
