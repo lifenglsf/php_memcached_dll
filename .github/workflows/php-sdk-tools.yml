@@ -391,6 +391,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{env.Pg}}-auto
+          draft: false
+          prerelease: false
 #      - name: nmake
 #        run: |
 #          nmake
