@@ -393,6 +393,7 @@ jobs:
           tag: v${{env.Pg}}-auto
           draft: false
           prerelease: false
+          allowUpdates: true
 #      - name: nmake
 #        run: |
 #          nmake
