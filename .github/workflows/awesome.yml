@@ -1,0 +1,285 @@
+name: Build and Test on Windows
+on: 
+  schedule:
+    - cron: '0 18 * * *'
+  push: 
+    paths: 
+      - .github/workflows/php-sdk-tools.yml
+jobs:
+  setup_matrix:
+    defaults:
+      run:
+        shell: powershell
+    runs-on: windows-2019
+    outputs: 
+      matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
+      Ig: ${{steps.setup_matrix.outputs.Ig}}
+      Mg: ${{steps.setup_matrix.outputs.Mg}}
+      Pg: ${{steps.setup_matrix.outputs.Pg}}
+    steps:
+      - name: setup matrix
+        id: setup_matrix
+        run: |
+          $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
+          $response|get-member -membertype NoteProperty
+          $tag=$response.PSObject.Properties | Select-Object -Expand Name
+          $tt=@()
+          foreach($t in $tag){
+            $tt+="$t"
+          }
+          $j=$tt|convertto-json
+          $v= $j|jq -c .
+          echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
+          echo "::set-output name=matrix-version::$v"
+          $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
+          $tag=$response|select-object -ExpandProperty "tag_name"
+          $tag=$tag -replace "v",""
+          echo "::set-output name=Pg::$tag"
+          echo "memcached latest version:$tag"
+          echo "Pg=$tag" >> $env:GITHUB_ENV
+          $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
+          $tag=$response|select-object -ExpandProperty "tag_name" 
+          $tag=$tag -replace "msgpack-",""
+          echo "msgpack latest version:$tag"
+          echo "::set-output name=Mg::$tag"
+          echo "Mg=$tag" >> $env:GITHUB_ENV
+          $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
+          $tag=$response|select-object -ExpandProperty "tag_name" 
+          echo "igbinary latest version:$tag"
+          echo "Ig=$tag" >> $env:GITHUB_ENV
+          echo "::set-output name=Ig::$tag"
+          $type=$tag.gettype()
+          
+            
+      
+  ts74-x64-msgpack:
+    needs: ["setup_matrix"]
+    env: 
+      Ig:  ${{needs.setup_matrix.outputs.Ig}}
+      Pg:  ${{needs.setup_matrix.outputs.Pg}}
+      Mg:  ${{needs.setup_matrix.outputs.Mg}}
+    defaults:
+      run:
+        shell: powershell
+    runs-on: windows-2019
+    outputs:
+      Ig: ${{needs.setup_matrix.outputs.Ig}}
+      Mg: ${{needs.setup_matrix.outputs.Mg}}
+      Pg: ${{needs.setup_matrix.outputs.Pg}}
+    strategy:
+      matrix:
+          #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
+          version: ["7.4","8.0","8.1"]
+          arch: [x64,x86]
+          ts: [ts,nts]
+          #ext: ["basic"]
+          ext: ["basic","igbinary","msgpack"]
+    steps:
+      - name: vc15
+        if: matrix.version=='7.4'
+        run: |
+          env
+          echo "Vs=vc15" >> $env:GITHUB_ENV
+      - name: vs16
+        if: matrix.version!='7.4'
+        run: |
+         env
+         echo "Vs=vs16" >> $env:GITHUB_ENV
+         echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
+      - name: Setup PHP
+        id: setup-php
+        uses: cmb69/setup-php-sdk@v0.6
+        with:
+          version: ${{matrix.version}}
+          arch: ${{matrix.arch}}
+          ts: ${{matrix.ts}}
+          deps: zlib,zip,libxml,libiconv,libjpeg,edit,libssl,libzip
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.arch}}
+          toolset: ${{steps.setup-php.outputs.toolset}}
+      - name : show deps
+        shell: cmd
+        run: |
+          
+          dir /N /S ..\deps
+          
+      - name: get php source and deps
+        run: |
+          #if("${{matrix.version}}" -eq "8.2" -and "${{env.Pg}}" -eq "3.2.0"){
+          #  echo "3.2.0不支持php8.2"
+          #}else{
+            phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
+            echo "copy cmdb deps to phpsource deps"
+            xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
+            echo "get latest php version"
+            curl   https://windows.php.net/downloads/releases/releases.json -o r.json
+            $CLRJson = Get-Content -Raw -Path "r.json" | ConvertFrom-Json
+            $version = $CLRJson."${{matrix.version}}".version 
+            rm r.json
+            cd ${{matrix.version}}-${{matrix.arch}}/${{env.Vs}}/${{matrix.arch}}
+            echo "get latest php source code"
+            curl  https://windows.php.net/downloads/releases/php-$version-src.zip -o ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
+            if("${{matrix.version}}" -eq "7.4"){
+                      $tmp_path="php-"+$version+"-src"
+                      echo "tmp_path:$tmp_path"
+                      mkdir $tmp_path
+                      7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip -otmp_php
+                      Get-ChildItem -Path tmp_php\* -Recurse | Move-Item -Destination $tmp_path
+                      Get-ChildItem -Path $tmp_path
+            }else{
+                      7z x ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip #
+            }
+            Get-ChildItem -Path .
+            rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
+            cd php-$version-src
+            echo "get memcached dependency"
+            curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/awesome-${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
+            7z x ${{matrix.arch}}.zip -odeps
+            xcopy /S /E /Y deps ..\deps
+            rm ${{matrix.arch}}.zip
+            dir
+            remove-item .\deps -Recurse
+            echo "get memcached ext source code"
+            curl  https://github.com/php-memcached-dev/php-memcached/archive/refs/tags/v${{env.Pg}}.zip -o m.zip
+            7z x m.zip 
+            xcopy /S /E /Y php-memcached-${{env.Pg}} ..\deps\include
+            md .\ext\memcached
+            xcopy /S /E /Y php-memcached-${{env.Pg}} ext\memcached
+            rm m.zip
+            remove-item .\php-memcached-${{env.Pg}} -Recurse
+            if("${{matrix.ext}}" -eq "basic"){
+              .\buildconf.bat
+              if("${{matrix.ts}}" -eq "nts"){
+              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps --disable-zts
+              }else{
+              .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --with-php-build=..\deps
+              }
+
+            }
+            if("${{matrix.ext}}" -eq "msgpack"){
+              curl   https://github.com/msgpack/msgpack-php/archive/refs/tags/msgpack-${{env.Mg}}.zip -o msgpack.zip
+             7z x msgpack.zip 
+             xcopy /S /E /Y msgpack-php-msgpack-${{env.Mg}} ..\deps\include
+             md .\ext\msgpack
+             xcopy /S /E /Y msgpack-php-msgpack-${{env.Mg}} .\ext\msgpack
+             remove-item .\msgpack-php-msgpack-${{env.Mg}} -Recurse
+             .\buildconf.bat
+             if("${{matrix.ts}}" -eq "nts"){
+                  .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps --disable-zts
+             }else{
+                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-msgpack --enable-msgpack=shared --with-php-build=..\deps
+             }
+            }
+            if("${{matrix.ext}}" -eq "igbinary"){
+             curl   https://github.com/igbinary/igbinary/archive/refs/tags/${{env.Ig}}.zip -o igbinary.zip
+             7z x igbinary.zip
+             xcopy /S /E /Y igbinary-${{env.Ig}} ..\deps\include
+             md .\ext\igbinary
+             xcopy /S /E /Y igbinary-${{env.Ig}} .\ext\igbinary
+             remove-item .\igbinary-${{env.Ig}} -Recurse
+             .\buildconf.bat
+             if("${{matrix.ts}}" -eq "nts"){
+                .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps --disable-zts
+            }else{
+                 .\configure --enable-memcached=shared --enable-memcached-session --enable-memcached-json --enable-memcached-igbinary --enable-igbinary=shared --with-php-build=..\deps
+            }
+            }
+            dir ext\memcached
+            nmake
+            mkdir -p ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+            copy ..\deps\bin\libmemcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+            if('${{matrix.arch}}' -eq 'x86'){
+              if('${{matrix.ts}}' -eq 'nts'){
+                copy Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }else{
+                copy Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }
+            }else{
+              if('${{matrix.ts}}' -eq 'nts'){
+                copy x64\Release\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }else{
+                copy x64\Release_TS\php_memcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+              }
+            }
+            dir
+            7z a ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}\*.*
+        
+          #}
+          
+      - name: Accidentally upload to the same artifact via multiple jobs
+        uses: actions/upload-artifact@v3
+        with:
+            name: ${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
+            path: ${{ github.workspace }}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}.7z
+     
+  create_release:
+    needs: [ts74-x64-msgpack]
+    defaults:
+      run:
+        shell: cmd
+    runs-on: windows-2019
+    env:
+      Ig: ${{needs.ts74-x64-msgpack.outputs.Ig}}
+      Pg: ${{needs.ts74-x64-msgpack.outputs.Pg}}
+      Mg: ${{needs.ts74-x64-msgpack.outputs.Mg}}
+    steps: 
+      - uses: actions/checkout@v3
+      - name : download artifact
+        uses: actions/download-artifact@v3
+        with: 
+          path: ${{env.Pg}}-artifacts
+
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: test
+        shell: powershell
+        run: |
+          
+          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts  -Recurse -Filter "*.7z"
+          Get-ChildItem -Path ${{ github.workspace }}\${{env.Pg}}-artifacts -Recurse -Filter "*.7z"|Foreach-Object{
+            echo "filename:$_";
+            $oname=$_.name -replace ".7z",""
+            $dir = $oname -replace "-","\"
+            $dir = "auto"+"-"+$dir
+            echo "oname:$oname,dir:$dir"
+            $flag=(Test-Path $dir)
+            echo "flag value $flag"
+            if(-not ($flag)){
+                echo "dir not exists"
+                mkdir -p $dir
+            }else{
+              echo "dir exists"
+            }
+            7z x $_.fullname
+            $fflag=(Test-Path '.\ucrtbased.dll')
+            if($fflag){
+                Remove-Item '.\ucrtbased.dll'
+            }
+            move-item -path  libmemcached.dll -destination $dir -force
+            move-item -path php_memcached.dll -destination $dir -force
+
+          }
+          remove-item ${{ github.workspace }}\${{env.Pg}}-artifacts -Recurse
+      - name: git commit   
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add auto-${{env.Pg}}* && git commit --allow-empty -m "${{env.Pg}} automatic compilation" && git push origin master
+          
+      - name: delete_tag
+        uses: dev-drprasad/delete-tag-and-release@v0.2.1
+        with:
+         delete_release: true # default: false
+         tag_name: v${{env.Pg}}-auto # tag name to delete
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: make release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: awesome-v${{env.Pg}}-auto
+          draft: false
+          prerelease: false
+          allowUpdates: true
