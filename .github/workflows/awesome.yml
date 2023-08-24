@@ -138,7 +138,7 @@ jobs:
             rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
             cd php-$version-src
             echo "get memcached dependency"
-            curl https://github.com/lifenglsf/libmemcached-window-dll-lib/raw/main/awesome-${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
+            curl https://github.com/lifenglsf/libmemcached-window-dll-lib/raw/main/awesome_${{matrix.arch}}.zip -o ${{matrix.arch}}.zip  
             7z x ${{matrix.arch}}.zip -odeps
             xcopy /S /E /Y deps ..\deps
             rm ${{matrix.arch}}.zip
