@@ -69,11 +69,14 @@ jobs:
     strategy:
       matrix:
           #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
-          version: ["7.4","8.0","8.1"]
-          arch: [x64,x86]
-          ts: [ts,nts]
-          #ext: ["basic"]
-          ext: ["basic","igbinary","msgpack"]
+          #version: ["7.4","8.0","8.1"]
+          #arch: [x64,x86]
+          #ts: [ts,nts]
+          version: ["7.4"]
+          arch: [x64]
+          ts: [ts]
+          ext: ["basic"]
+          #ext: ["basic","igbinary","msgpack"]
     steps:
       - name: vc15
         if: matrix.version=='7.4'
@@ -135,7 +138,7 @@ jobs:
             rm ${{matrix.version}}-${{matrix.arch}}-${{matrix.ts}}-${{matrix.ext}}.zip
             cd php-$version-src
             echo "get memcached dependency"
-            curl https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/awesome-${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
+            curl https://github.com/lifenglsf/libmemcached-window-dll-lib/raw/main/awesome-${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip  
             7z x ${{matrix.arch}}.zip -odeps
             xcopy /S /E /Y deps ..\deps
             rm ${{matrix.arch}}.zip
