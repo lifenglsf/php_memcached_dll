@@ -32,6 +32,7 @@ jobs:
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
           echo "::set-output name=matrix-version::$v"
           echo "matrixversion=$v">>"$GITHUB_ENV"
+          echo $v
           env
           xyz
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
