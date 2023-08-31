@@ -39,8 +39,7 @@ jobs:
           echo "Pgs=$tag">>$GITHUB_ENV
           echo "::set-output name=Pg::$tag"
           echo "memcached latest version:$tag"
-          env 
-          xyz
+          
           #echo "Pg=$tag" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
@@ -87,11 +86,13 @@ jobs:
         if: matrix.version=='7.4'
         run: |
           env
+          xyz
           echo "Vs=vc15" >> $GITHUB_ENV
       - name: vs16
         if: matrix.version!='7.4'
         run: |
          env
+         xyz
          echo "Vs=vs16" >> $GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
       - name: Setup PHP
