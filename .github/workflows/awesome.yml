@@ -245,7 +245,7 @@ jobs:
             echo "filename:$_";
             $oname=$_.name -replace ".7z",""
             $dir = $oname -replace "-","\"
-            $dir = "auto"+"-"+$dir
+            $dir = "awesome-auto"+"-"+$dir
             echo "oname:$oname,dir:$dir"
             $flag=(Test-Path $dir)
             echo "flag value $flag"
@@ -269,13 +269,13 @@ jobs:
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git add auto-${{env.Pg}}* && git commit --allow-empty -m "${{env.Pg}} automatic compilation" && git push origin master
+          git add awesome-auto-${{env.Pg}}* && git commit --allow-empty -m "${{env.Pg}} automatic compilation" && git push origin master
           
       - name: delete_tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.1
         with:
          delete_release: true # default: false
-         tag_name: v${{env.Pg}}-auto # tag name to delete
+         tag_name: awesome-v${{env.Pg}}-auto # tag name to delete
         env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: make release
