@@ -17,6 +17,14 @@ jobs:
       Mg: ${{steps.setup_matrix.outputs.Mg}}
       Pg: ${{steps.setup_matrix.outputs.Pg}}
     steps:
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "action_state=yellow" | Out-File -FilePath $env:GITHUB_ENV -Append # no need for -Encoding utf8
+      - name: Use the value
+        id: step_two
+        run: | 
+          echo "${{ env.action_state }}" # This will output 'yellow'
       - name: setup matrix
         id: setup_matrix
         run: |
