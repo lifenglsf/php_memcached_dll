@@ -39,11 +39,11 @@ jobs:
           $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
           echo "::set-output name=matrix-version::$v"
-          echo "matrixversion=$v" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "matrixversion=$v" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name"
           $tag=$tag -replace "v",""
-          echo "Pg=$tag"|Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "Pg=$tag"|Out-File -FilePath $env:GITHUB_OUTPUT -Append
           #echo "::set-output name=Pg::$tag"
           echo "memcached latest version:$tag"
           
@@ -53,11 +53,11 @@ jobs:
           $tag=$tag -replace "msgpack-",""
           echo "msgpack latest version:$tag"
           #echo "::set-output name=Mg::$tag"
-          echo "Mg=$tag" |Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "Mg=$tag" |Out-File -FilePath $env:GITHUB_OUTPUT -Append
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           echo "igbinary latest version:$tag"
-          echo "Ig=$tag" |Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "Ig=$tag" |Out-File -FilePath $env:GITHUB_OUTPUT -Append
           #echo "::set-output name=Ig::$tag"
           $type=$tag.gettype()
           
@@ -93,7 +93,7 @@ jobs:
         if: matrix.version=='7.4'
         run: |
           env
-          echo "啦啦啦啦 ${{ env.Ig }}----${{ env.action_state }}" 
+          echo "lalala ${{ env.Ig }}----${{ env.action_state }}" 
           xyz
           echo "Vs=vc15" >> $GITHUB_ENV
       - name: vs16
