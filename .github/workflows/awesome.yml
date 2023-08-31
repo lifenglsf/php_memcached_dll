@@ -34,20 +34,21 @@ jobs:
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name"
           $tag=$tag -replace "v",""
-          echo "::set-output name=Pg::$tag"
+          echo "Pg=$tag">>$GITHUB_ENV
+          #echo "::set-output name=Pg::$tag"
           echo "memcached latest version:$tag"
-          echo "Pg=$tag" >> $env:GITHUB_ENV
+          #echo "Pg=$tag" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           $tag=$tag -replace "msgpack-",""
           echo "msgpack latest version:$tag"
-          echo "::set-output name=Mg::$tag"
-          echo "Mg=$tag" >> $env:GITHUB_ENV
+          #echo "::set-output name=Mg::$tag"
+          echo "Mg=$tag" >> $GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           echo "igbinary latest version:$tag"
-          echo "Ig=$tag" >> $env:GITHUB_ENV
-          echo "::set-output name=Ig::$tag"
+          echo "Ig=$tag" >> $GITHUB_ENV
+          #echo "::set-output name=Ig::$tag"
           $type=$tag.gettype()
           
             
@@ -82,12 +83,12 @@ jobs:
         if: matrix.version=='7.4'
         run: |
           env
-          echo "Vs=vc15" >> $env:GITHUB_ENV
+          echo "Vs=vc15" >> $GITHUB_ENV
       - name: vs16
         if: matrix.version!='7.4'
         run: |
          env
-         echo "Vs=vs16" >> $env:GITHUB_ENV
+         echo "Vs=vs16" >> $GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
       - name: Setup PHP
         id: setup-php
@@ -113,7 +114,7 @@ jobs:
           #if("${{matrix.version}}" -eq "8.2" -and "${{env.Pg}}" -eq "3.2.0"){
           #  echo "3.2.0不支持php8.2"
           #}else{
-            phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
+            #phpsdk_buildtree.bat ${{matrix.version}}-${{matrix.arch}}
             echo "copy cmdb deps to phpsource deps"
             xcopy /S /E ..\deps ${{matrix.version}}-${{matrix.arch}}\${{env.Vs}}\${{matrix.arch}}\deps
             echo "get latest php version"
