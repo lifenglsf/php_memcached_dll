@@ -36,7 +36,7 @@ jobs:
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/php-memcached-dev/php-memcached/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name"
           $tag=$tag -replace "v",""
-          echo "Pgs=$tag">>$GITHUB_ENV
+          echo "{Pgs}={$tag}">>$GITHUB_ENV
           echo "::set-output name=Pg::$tag"
           echo "memcached latest version:$tag"
           
