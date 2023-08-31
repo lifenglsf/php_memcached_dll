@@ -46,7 +46,7 @@ jobs:
           $tag=$tag -replace "msgpack-",""
           echo "msgpack latest version:$tag"
           #echo "::set-output name=Mg::$tag"
-          echo "Mg=$tag" >> $GITHUB_ENV
+          echo "Mgs=$tag" >> $GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/igbinary/igbinary/releases/latest"
           $tag=$response|select-object -ExpandProperty "tag_name" 
           echo "igbinary latest version:$tag"
