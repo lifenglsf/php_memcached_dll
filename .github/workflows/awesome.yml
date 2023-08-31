@@ -10,7 +10,7 @@ jobs:
     defaults:
       run:
         shell: powershell
-    runs-on: windows-latest
+    runs-on: windows-2019
     outputs: 
       matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
       Ig: ${{steps.setup_matrix.outputs.Ig}}
@@ -85,13 +85,13 @@ jobs:
       - name: vc15
         if: matrix.version=='7.4'
         run: |
-          env
+          echo "啦啦啦啦 ${{ env.Ig }}" 
           xyz
           echo "Vs=vc15" >> $GITHUB_ENV
       - name: vs16
         if: matrix.version!='7.4'
         run: |
-         env
+         echo "啦啦啦啦 ${{ env.Ig }}" 
          xyz
          echo "Vs=vs16" >> $GITHUB_ENV
          echo "github runner_id ${{github.run_id}},runtime_url: ${{ env.ACTIONS_RUNTIME_URL }}"
