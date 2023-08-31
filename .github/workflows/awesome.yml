@@ -10,7 +10,7 @@ jobs:
     defaults:
       run:
         shell: powershell
-    runs-on: windows-2019
+    runs-on: windows-latest
     outputs: 
       matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
       Ig: ${{steps.setup_matrix.outputs.Ig}}
