@@ -229,6 +229,7 @@ jobs:
             }
             dir ext\memcached
             nmake
+            dir /N /S x64\Release_TS
             mkdir -p ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             copy ..\deps\bin\libmemcached.dll ${{github.workspace}}\${{env.Pg}}-${{matrix.ext}}-php${{matrix.version}}-${{matrix.ts}}_${{matrix.arch}}
             if('${{matrix.arch}}' -eq 'x86'){
