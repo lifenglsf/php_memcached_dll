@@ -1,7 +1,7 @@
 name: Build and Test on Windows
 on: 
   schedule:
-    - cron: '0 18 * * *'
+    - cron: '0 23 * * *'
   push: 
     paths: 
       - .github/workflows/nightly.yml
@@ -65,12 +65,14 @@ jobs:
       Pg: ${{needs.setup_matrix.outputs.Pg}}
     strategy:
       matrix:
-          version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
-          #version: ["7.4","8.0","8.1"]
-          arch: [x64,x86]
-          ts: [ts,nts]
-          #ext: ["basic"]
-          ext: ["basic","igbinary","msgpack"]
+          #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
+          version: ["8.2"]
+          #arch: [x64,x86]
+          arch: [x64]
+          #ts: [ts,nts]
+          ts: [ts]
+          ext: ["basic"]
+          #ext: ["basic","igbinary","msgpack"]
     steps:
       - name: vc15
         if: matrix.version=='7.4'
@@ -181,7 +183,7 @@ jobs:
             dir
             remove-item .\deps -Recurse
             echo "get memcached ext source code"
-            curl  https://github.com/php-memcached-dev/php-memcached/archive/refs/tags/v${{env.Pg}}.zip -o m.zip
+            curl  https://codeload.github.com/php-memcached-dev/php-memcached/zip/refs/heads/master -o m.zip
             7z x m.zip 
             xcopy /S /E /Y php-memcached-${{env.Pg}} ..\deps\include
             md .\ext\memcached
