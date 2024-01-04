@@ -31,7 +31,7 @@ jobs:
           $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
           echo "::set-output name=matrix-version::$v"
-          echo "::set-output name=Pg::latest"
+          echo "::set-output name=Pg::master"
           echo "memcached latest version:$tag"
           echo "Pg=$tag" >> $env:GITHUB_ENV
           $response = Invoke-RestMethod -Method Get -Uri  "https://api.github.com/repos/msgpack/msgpack-php/releases/latest"
@@ -185,7 +185,7 @@ jobs:
             echo "get memcached ext source code"
             curl  https://codeload.github.com/php-memcached-dev/php-memcached/zip/refs/heads/master -o m.zip
             7z x m.zip 
-            xcopy /S /E /Y php-memcached-${{env.Pg}} ..\deps\include
+            xcopy /S /E /Y php-memcached-${{env.Pg}}  ..\deps\include
             md .\ext\memcached
             xcopy /S /E /Y php-memcached-${{env.Pg}} ext\memcached
             rm m.zip
