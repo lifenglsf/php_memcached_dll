@@ -189,7 +189,7 @@ jobs:
             md .\ext\memcached
             xcopy /S /E /Y php-memcached-${{env.Pg}} ext\memcached
             rm m.zip
-            remove-item .\php-memcached-${{env.Pg}} -Recurse
+            remove-item .\php-memcached-master -Recurse
             if("${{matrix.ext}}" -eq "basic"){
               .\buildconf.bat
               if("${{matrix.ts}}" -eq "nts"){
