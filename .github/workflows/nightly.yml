@@ -65,8 +65,8 @@ jobs:
       Pg: ${{needs.setup_matrix.outputs.Pg}}
     strategy:
       matrix:
-          version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
-          #version: ["8.2"]
+          #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
+          version: ["8.2"]
           arch: [x64,x86]
           #arch: [x64]
           ts: [ts,nts]
