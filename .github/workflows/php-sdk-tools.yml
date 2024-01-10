@@ -382,6 +382,7 @@ jobs:
       - name: delete_tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.1
         with:
+         delete_release: true #(optional) default: true
          tag_name: v${{env.Pg}}-auto # tag name to delete
         env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
