@@ -65,8 +65,8 @@ jobs:
       Pg: ${{needs.setup_matrix.outputs.Pg}}
     strategy:
       matrix:
-          #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
-          version: ["8.2"]
+          version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
+          #version: ["8.2"]
           arch: [x64,x86]
           #arch: [x64]
           ts: [ts,nts]
@@ -129,7 +129,7 @@ jobs:
 #          echo "count value $count,value $value"
       - name: Setup PHP
         id: setup-php
-        uses: cmb69/setup-php-sdk@v0.6
+        uses: php/setup-php-sdk@v0.8
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
