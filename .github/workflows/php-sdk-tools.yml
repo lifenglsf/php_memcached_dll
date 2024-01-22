@@ -1,7 +1,7 @@
 name: Build and Test on Windows
 on: 
-  schedule:
-    - cron: '0 18 * * *'
+  #schedule:
+  #  - cron: '0 18 * * *'
   push: 
     paths: 
       - .github/workflows/php-sdk-tools.yml
