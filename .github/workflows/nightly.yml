@@ -1,7 +1,7 @@
 name: Build and Test on Windows
 on: 
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 23 * * 3'
   push: 
     paths: 
       - .github/workflows/nightly.yml
