@@ -381,18 +381,20 @@ jobs:
       - name: delete_tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.1
         with:
-         tag_name: nightly # tag name to delete
          delete_release: true
+         tag_name: nightly # tag name to delete
         env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: make release
-        uses: ncipollo/release-action@v1
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          name: Latest Nightly
-          tag: nightly
-          allowUpdates: true
+          tag_name: nightly
+          release_name: nightly
+          body: |
+            nightly
           prerelease: true
-          token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           
           
