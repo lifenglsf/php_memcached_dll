@@ -338,7 +338,7 @@ jobs:
 #          curl ${{ env.ACTIONS_RUNTIME_URL }}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview -o a.json
 #          cat a.json
       - name : download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with: 
           path: ${{env.Pg}}-artifacts
 
