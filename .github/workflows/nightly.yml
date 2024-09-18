@@ -5,6 +5,7 @@ on:
   push: 
     paths: 
       - .github/workflows/nightly.yml
+  workflow_dispatch: # 允许手动触发
 jobs:
   setup_matrix:
     defaults:
