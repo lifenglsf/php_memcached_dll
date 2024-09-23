@@ -22,16 +22,19 @@ jobs:
         id: setup_matrix
         run: |
           $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
-          $response|get-member -membertype NoteProperty
-          $tag=$response.PSObject.Properties | Select-Object -Expand Name
-          $tt=@()
-          foreach($t in $tag){
-            $tt+="$t"
-          }
-          $j=$tt|convertto-json
-          $v= $j|jq -c .
+          $jsonString = $response | ConvertTo-Json
+          $versions = echo $jsonString | jq -r '.[] | select(.sha256 != null) | .version' | tr '\n' ' '
+
+          # $response|get-member -membertype NoteProperty
+          # $tag=$response.PSObject.Properties | Select-Object -Expand Name
+          # $tt=@()
+          # foreach($t in $tag){
+          #  $tt+="$t"
+          # }
+          # $j=$tt|convertto-json
+          # $v= $j|jq -c .
           echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
-          echo "::set-output name=matrix-version::$v"
+          echo "::set-output name=matrix-version::$versions"
           echo "::set-output name=Pg::master"
           echo "memcached latest version:$tag"
           echo "Pg=$tag" >> $env:GITHUB_ENV
