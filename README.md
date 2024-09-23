@@ -98,7 +98,7 @@ TodList
 - [x] Automatically get latest php-memcached version
 - [x] Automatically get latest msgpack version
 - [x] Automatically get latest igbinary version
-- [ ] Automatically get latest supported php version
+- [x] Automatically get latest supported php version
 - [ ] Support libmemcached-awesome 
 
 
