@@ -24,7 +24,13 @@ jobs:
           # $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
           $jsonFilePath = "releases.json"
 
-          Invoke-RestMethod -Method Get -Uri "https://windows.php.net/downloads/releases/releases.json" | Out-File -FilePath $jsonFilePath -Encoding utf8
+          $response = Invoke-RestMethod -Method Get -Uri "https://windows.php.net/downloads/releases/releases.json"
+          Write-Output "JSON Data:"
+          Write-Output $response
+
+          # 将 JSON 数据保存到临时文件
+          $jsonFilePath = "$env:USERPROFILE\releases.json"
+          $response | Out-File -FilePath $jsonFilePath -Encoding utf8
           # $jsonString = $response | ConvertTo-Json -Compress
           $response | ConvertTo-Json -Compress | Set-Content -Path $jsonFilePath
 
