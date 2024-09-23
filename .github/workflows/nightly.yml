@@ -29,13 +29,13 @@ jobs:
           
           # 将 PowerShell 对象转换为 JSON 字符串并保存到文件
           $jsonFilePath = "releases.json"
-          $response | ConvertTo-Json -Compress | Set-Content -Path $jsonFilePath
+          $vers = $response | ConvertTo-Json -Compress 
 
           # 输出转换后的 JSON 数据供调试
           Write-Output "Serialized JSON Data:"
-          Get-Content $jsonFilePath
+          Write-Output $vers
 
-          $versions =jq '[to_entries[] | select(.value["ts-vc15-x64"]?.zip.sha256 != null or .value["test_pack"].sha256 != null ) | .key]' $jsonFilePath
+          $versions =echo $vers |jq '[to_entries[] | select(.value["test_pack"].sha256 != null ) | .key]'
           # 输出保存的版本结果供调试
           Write-Output "Version Result:"
           Write-Output $versions
