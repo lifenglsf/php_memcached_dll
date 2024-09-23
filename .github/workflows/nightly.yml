@@ -28,7 +28,7 @@ jobs:
           $response = Invoke-RestMethod -Method Get -Uri "https://windows.php.net/downloads/releases/releases.json"
           
           # 将 PowerShell 对象转换为 JSON 字符串并保存到文件
-          $jsonFilePath = "$env:USERPROFILE\releases.json"
+          $jsonFilePath = "releases.json"
           $response | ConvertTo-Json -Compress | Set-Content -Path $jsonFilePath
 
           # 输出转换后的 JSON 数据供调试
