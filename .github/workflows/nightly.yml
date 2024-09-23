@@ -10,7 +10,7 @@ jobs:
   setup_matrix:
     defaults:
       run:
-        shell: powershell
+        shell: pwsh
     runs-on: windows-2019
     outputs: 
       matrix-version: ${{steps.setup_matrix.outputs.matrix-version}}
@@ -21,7 +21,8 @@ jobs:
       - name: setup matrix
         id: setup_matrix
         run: |
-          $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
+          # $response = Invoke-RestMethod -Method Get -Uri  "https://windows.php.net/downloads/releases/releases.json"
+          Invoke-RestMethod -Method Get -Uri "https://windows.php.net/downloads/releases/releases.json" | Out-File -FilePath $jsonFilePath -Encoding utf8
           # $jsonString = $response | ConvertTo-Json -Compress
           $jsonFilePath = "releases.json"
           $response | ConvertTo-Json -Compress | Set-Content -Path $jsonFilePath
