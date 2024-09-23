@@ -34,13 +34,11 @@ jobs:
           # $j=$tt|convertto-json
           # $v= $j|jq -c .
           # echo "phpversion latest version:$tag,type:$type,tt:$tt,json:$tt|jq -s -c"
-          # 将版本转换为 JSON 矩阵格式
-          $matrix = @()
-          foreach ($version in $versions) {
-            $matrix += $version
-          }
-          $matrixJson = $matrix | ConvertTo-Json -Compress
-          echo "::set-output name=matrix-version::$matrixJson"
+          # 将版本转换为 JSON 数组格式
+          $versionArray = $versions -join '","'
+          $versionArray = '["' + $versionArray + '"]'
+          echo "version is $versionArray"
+          echo "::set-output name=matrix-version::$versionArray"
           echo "::set-output name=Pg::master"
           echo "memcached latest version:$tag"
           echo "Pg=$tag" >> $env:GITHUB_ENV
