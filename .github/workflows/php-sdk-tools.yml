@@ -130,7 +130,7 @@ jobs:
 #          echo "count value $count,value $value"
       - name: Setup PHP
         id: setup-php
-        uses: cmb69/setup-php-sdk@v0.6
+        uses: cmb69/setup-php-sdk@v0.10
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
