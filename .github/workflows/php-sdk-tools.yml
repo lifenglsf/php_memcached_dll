@@ -69,7 +69,7 @@ jobs:
     strategy:
       matrix:
           #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
-          version: ["7.4","8.0","8.1"]
+          version: ["7.4","8.0","8.1","8.2","8.3"]
           arch: [x64,x86]
           ts: [ts,nts]
           #ext: ["basic"]
@@ -338,7 +338,7 @@ jobs:
 #          curl ${{ env.ACTIONS_RUNTIME_URL }}_apis/pipelines/workflows/${{github.run_id}}/artifacts?api-version=6.0-preview -o a.json
 #          cat a.json
       - name : download artifact
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4
         with: 
           path: ${{env.Pg}}-artifacts
 
