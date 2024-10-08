@@ -1,4 +1,4 @@
-name: Build and Test on Windows
+name: Build and Test on Windows mem latest
 on: 
   #schedule:
   #  - cron: '0 18 * * *'
