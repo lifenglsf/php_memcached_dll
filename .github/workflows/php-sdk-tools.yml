@@ -70,12 +70,12 @@ jobs:
     strategy:
       matrix:
           #version: ${{ fromjson(needs.setup_matrix.outputs.matrix-version)}}
-          #version: ["7.4","8.0","8.1","8.2","8.3"]
-          version: ["7.4"]
+          version: ["7.4","8.0","8.1","8.2","8.3"]
+          #version: ["7.4"]
           arch: [x64,x86]
           ts: [ts,nts]
-          ext: ["basic"]
-          #ext: ["basic","igbinary","msgpack"]
+          #ext: ["basic"]
+          ext: ["basic","igbinary","msgpack"]
     steps:
       - name: vc15
         if: matrix.version=='7.4'
