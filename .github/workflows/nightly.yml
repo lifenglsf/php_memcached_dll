@@ -151,12 +151,14 @@ jobs:
 #          echo "count value $count,value $value"
       - name: Setup PHP
         id: setup-php
-        uses: php/setup-php-sdk@8d9e79bdbce494591e33d542377778613cfca59f
+        uses: php/setup-php-sdk@0.10
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
           deps: zlib,zip,libxml,libiconv,libjpeg,edit,libssl,libzip
+          cache: true
+
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
