@@ -151,7 +151,7 @@ jobs:
 #          echo "count value $count,value $value"
       - name: Setup PHP
         id: setup-php
-        uses: php/setup-php-sdk@0.10
+        uses: php/setup-php-sdk@v0.10
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
