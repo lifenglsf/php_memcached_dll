@@ -64,12 +64,13 @@ jobs:
           ref: ${{ env.ver }}
       - name: Setup PHP
         id: setup-php
-        uses: cmb69/setup-php-sdk@v0.3
+        uses: php/setup-php-sdk@v0.10
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
           deps: zlib
+          cache: true
       - name: Download deps
         run: |
           curl -L https://github.com/lifenglsf/libmemcached-window-dll-lib/blob/main/${{matrix.arch}}.zip?raw=true -o ${{matrix.arch}}.zip
